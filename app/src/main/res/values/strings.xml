@@ -11,8 +11,10 @@
     <string name="manage_items">Manage Items</string>
 
     <string-array name="categories_array">
-        <item>Books</item>
-        <item>Movies</item>
+        <item>Document</item>
+        <item>Emergency Contact</item>
+        <item>Safe Location</item>
+        <item>Medication</item>
     </string-array>
 
 

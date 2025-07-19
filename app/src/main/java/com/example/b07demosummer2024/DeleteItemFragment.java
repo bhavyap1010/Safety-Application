@@ -23,7 +23,6 @@ public class DeleteItemFragment extends Fragment {
     private EditText editTextTitle;
     private Spinner spinnerCategory;
     private Button buttonDelete;
-
     private FirebaseDatabase db;
     private DatabaseReference itemsRef;
 
@@ -36,7 +35,7 @@ public class DeleteItemFragment extends Fragment {
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         buttonDelete = view.findViewById(R.id.buttonDelete);
 
-        db = FirebaseDatabase.getInstance("https://b07-demo-summer-2024-default-rtdb.firebaseio.com/");
+        db = FirebaseDatabase.getInstance("https://b07finalproject-23dae-default-rtdb.firebaseio.com/");
 
         // Set up the spinner with categories
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -92,7 +91,5 @@ public class DeleteItemFragment extends Fragment {
                 Toast.makeText(getContext(), "Database error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }
