@@ -1,0 +1,138 @@
+{
+	
+"Branch": {
+	"Common Warm-Up Questions": [
+	{
+		  "Question": "Which best describes your situation?",
+		  "Type": "Select One",
+
+		  "Choices": ["Still in a relationship", "Planning to leave", "Post-separation"]
+	},
+	{
+		"Question": "What city do you live in?",
+		  "Type": "free-form"
+
+		  
+	},
+	
+	{
+		"Question": "Which room in your home feels the safest if you need to get away quickly?",
+		  "Type": "free-form"
+
+		  
+	},
+	
+	
+	{
+		  "Question": "Who do you live with?",
+		  "Type": "Select One",
+
+		  "Choices": ["Family", "Roommates", "Alone", "Partner"]
+	},
+
+	{
+		  "Question": "Do you have children?",
+		  "Type": "Select One + free form",
+
+		  "Choices": ["Yes", "No"],
+		  "Then": "then enter a code word:"
+	}
+
+
+
+],
+  "Still in a Relationship":[
+  {
+  
+	  "Question": "Which form(s) of abuse are you experiencing?",
+	  "Type": "Select One + free form",
+
+	  "Choices": ["Physical", "Emotional", "Financial", "Other"]
+	  
+  }, 
+  
+  {
+	  
+	  "Question": "Are you recording the incidents (dates, times, details)?",
+	  "Type": "Select One",
+      "Choices": ["Yes", "No"]
+	  
+  }, 
+  
+  {
+	  
+	  "Question": "Name one person you can call immediately in an emergency.",
+	  "Type": "free-form"
+	  
+  }
+  
+  ],
+  
+  "Planning to Leave":[
+  {
+  
+	  "Question": "When do you plan to leave?",
+	  "Type": "free-form"	  
+  }, 
+  
+  {
+	  
+	  "Question": "Do you have a go-bag packed with essentials?",
+	  "Type": "Select One",
+      "Choices": ["Yes", "No"]
+	  
+  }, 
+  
+  {
+	  
+	  "Question": "Where do you keep emergency cash or cards?",
+	  "Type": "free-form"
+
+	  
+  },
+  
+  {
+	  "Question": "Have you identified a safe place to stay?",
+	  "Type": "Select One + free form",
+      "Choices": ["Yes", "No"]
+	  
+  }
+  
+  ],
+  
+  "Post-Separation":[
+  {
+  
+	  "Question": "Has the abuser continued any contact?",
+	  "Type": "Select One",
+      "Choices": ["Yes", "No"]
+  }, 
+  
+  {
+	  
+	  "Question": "Do you have a protection order? If yes, which type?",
+	  "Type": "Select One + free form",
+      "Choices": ["Yes", "No"]
+	  
+  }, 
+  
+  {
+	  "Question": "Are you using any safety tools (cameras, door alarms)?",
+	  "Type": "Select One + free form",
+      "Choices": ["Yes", "No"]
+	  
+  }
+  
+  ],
+  
+  "Follow-Up & Stabilization": [
+  {
+	"Question": "Which type of support would help most right now?",
+	  "Type": "Select One",
+      "Choices": ["Counselling", "Legal aid", "Financial guidance", "Co-parenting resources" ]
+  }
+  
+  ]
+  
+}
+}
