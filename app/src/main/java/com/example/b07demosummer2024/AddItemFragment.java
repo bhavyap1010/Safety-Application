@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import android.widget.AdapterView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -69,7 +70,82 @@ public class AddItemFragment extends Fragment {
             }
         });
 
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCategory = parent.getSelectedItem().toString().toLowerCase();
+                onCategoryChanged(selectedCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle no selection
+            }
+        });
         return view;
+    }
+    private void onCategoryChanged(String selectedCategory){
+        switch (selectedCategory){
+            case "document":
+                editTextGovId.setVisibility(View.VISIBLE);
+                editTextCourtOrders.setVisibility(View.VISIBLE);
+
+                editTextName.setVisibility(View.GONE);
+                editTextRelationship.setVisibility(View.GONE);
+                editTextPhone.setVisibility(View.GONE);
+
+                editTextAddress.setVisibility(View.GONE);
+                editTextNote.setVisibility(View.GONE);
+
+                editTextMedName.setVisibility(View.GONE);
+                editTextDosage.setVisibility(View.GONE);
+
+                break;
+            case "emergency contact":
+                editTextGovId.setVisibility(View.GONE);
+                editTextCourtOrders.setVisibility(View.GONE);
+
+                editTextName.setVisibility(View.VISIBLE);
+                editTextRelationship.setVisibility(View.VISIBLE);
+                editTextPhone.setVisibility(View.VISIBLE);
+
+                editTextAddress.setVisibility(View.GONE);
+                editTextNote.setVisibility(View.GONE);
+
+                editTextMedName.setVisibility(View.GONE);
+                editTextDosage.setVisibility(View.GONE);
+
+                break;
+            case "safe location":
+                editTextGovId.setVisibility(View.GONE);
+                editTextCourtOrders.setVisibility(View.GONE);
+
+                editTextName.setVisibility(View.GONE);
+                editTextRelationship.setVisibility(View.GONE);
+                editTextPhone.setVisibility(View.GONE);
+
+                editTextAddress.setVisibility(View.VISIBLE);
+                editTextNote.setVisibility(View.VISIBLE);
+
+                editTextMedName.setVisibility(View.GONE);
+                editTextDosage.setVisibility(View.GONE);
+
+                break;
+            case "medication":
+                editTextGovId.setVisibility(View.GONE);
+                editTextCourtOrders.setVisibility(View.GONE);
+
+                editTextName.setVisibility(View.GONE);
+                editTextRelationship.setVisibility(View.GONE);
+                editTextPhone.setVisibility(View.GONE);
+
+                editTextAddress.setVisibility(View.GONE);
+                editTextNote.setVisibility(View.GONE);
+
+                editTextMedName.setVisibility(View.VISIBLE);
+                editTextDosage.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     private void addItem() {
