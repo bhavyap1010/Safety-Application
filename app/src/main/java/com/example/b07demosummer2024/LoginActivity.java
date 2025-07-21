@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
 
     private EditText editTextEmail, editTextPassword;
-    private Button buttonLogin, buttonRegister, buttonGoogleSignIn;
+    private Button buttonLogin, buttonRegister, buttonGoogleSignIn, buttonForgotPassword;
 
     private ActivityResultLauncher<Intent> googleSignInLauncher;
 
@@ -98,12 +98,29 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonRegister = findViewById(R.id.buttonRegister);
         buttonGoogleSignIn = findViewById(R.id.buttonGoogleSignIn);
+        buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
     }
 
     private void setupClickListeners() {
         buttonLogin.setOnClickListener(v -> loginWithEmail());
         buttonRegister.setOnClickListener(v -> registerWithEmail());
         buttonGoogleSignIn.setOnClickListener(v -> signInWithGoogle());
+        buttonForgotPassword.setOnClickListener(v -> resetPassword());
+    }
+    private void resetPassword() {
+        String email = editTextEmail.getText().toString().trim();
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        mAuth.sendPasswordResetEmail(email)
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Password reset email sent", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Failed to send reset email", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     private void loginWithEmail() {
@@ -128,7 +145,12 @@ public class LoginActivity extends AppCompatActivity {
                             Exception exception = task.getException();
                             String errorMessage = "Login failed";
                             if (exception != null) {
-                                errorMessage = "Login failed: " + exception.getMessage();
+                                String exceptionName = exception.getClass().getSimpleName();
+                                if (exceptionName.equals("FirebaseAuthInvalidCredentialsException")) {
+                                    errorMessage = "Invalid email/password.";
+                                } else {
+                                    errorMessage = "Login failed: " + exception.getMessage();
+                                }
                                 Log.e(TAG, "Full error: " + exception.toString());
                             }
                             Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();

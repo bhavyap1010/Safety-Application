@@ -39,7 +39,10 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress" />
 
+
     </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <!-- Password input -->
     <com.google.android.material.textfield.TextInputLayout
@@ -54,7 +57,19 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
 
+
     </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Forgot Password button -->
+    <Button
+        android:id="@+id/buttonForgotPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Forgot Password?"
+        android:textSize="14sp"
+        android:textColor="#2196F3"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="16dp" />
 
     <!-- Login button -->
     <Button
