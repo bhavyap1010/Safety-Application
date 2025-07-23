@@ -1,13 +1,23 @@
 package com.example.b07demosummer2024;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +27,9 @@ import android.widget.AdapterView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class AddItemFragment extends Fragment {
 
     //documents
@@ -25,10 +38,16 @@ public class AddItemFragment extends Fragment {
     private EditText editTextName, editTextRelationship, editTextPhone;
     private EditText editTextAddress, editTextNote;
     private EditText editTextMedName, editTextDosage;
+    private ImageView imageViewAddImage, imageViewAddPdf;
+    private ImageView imageViewAddImageDisplay;
+    private TextView textViewPdfNameDisplay;
     private Spinner spinnerCategory;
     private Button buttonAdd;
     private FirebaseDatabase db;
     private DatabaseReference itemsRef;
+    private StorageReference reference;
+    private Uri imageUri, pdfUri;
+
 
     @Nullable
     @Override
@@ -52,10 +71,17 @@ public class AddItemFragment extends Fragment {
         editTextMedName = view.findViewById(R.id.editTextMedName);
         editTextDosage = view.findViewById(R.id.editTextDosage);
 
+        imageViewAddImage = view.findViewById(R.id.imageViewAddImage);
+        imageViewAddPdf = view.findViewById(R.id.imageViewAddPdf);
+
+        imageViewAddImageDisplay = view.findViewById(R.id.imageViewAddImageDisplay);
+        textViewPdfNameDisplay = view.findViewById(R.id.textViewPdfNameDisplay);
+
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         buttonAdd = view.findViewById(R.id.buttonAdd);
 
         db = FirebaseDatabase.getInstance("https://b07finalproject-23dae-default-rtdb.firebaseio.com/");
+        reference = FirebaseStorage.getInstance().getReference();
 
         // Set up the spinner with categories
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -63,10 +89,32 @@ public class AddItemFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
 
+        imageViewAddImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent();
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, 2);
+            }
+        });
+
+        imageViewAddPdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fileIntent = new Intent();
+                fileIntent.setAction(Intent.ACTION_GET_CONTENT);
+                fileIntent.setType("application/pdf"); // Any file type
+                startActivityForResult(fileIntent, 3);
+            }
+        });
+
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addItem();
+                setTextNull();
+
             }
         });
 
@@ -147,7 +195,6 @@ public class AddItemFragment extends Fragment {
                 break;
         }
     }
-
     private void addItem() {
         String title = editTextTitle.getText().toString().trim();
         String description = editTextDescription.getText().toString().trim();
@@ -197,12 +244,177 @@ public class AddItemFragment extends Fragment {
                 break;
         }
 
-        itemsRef.child(id).setValue(item).addOnCompleteListener(task -> {
+        if (imageUri != null && pdfUri != null){
+            addBoth(imageUri, pdfUri, item);
+        } else if (imageUri != null) {
+            addMedia(imageUri, item, true);
+        } else if (pdfUri != null) {
+            addMedia(pdfUri, item, false);
+        } else {
+            itemsRef.child(id).setValue(item).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Item added", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 2 && resultCode == RESULT_OK && data != null){
+            imageUri = data.getData();
+            imageViewAddImageDisplay.setImageURI(imageUri); //this is what change the image in the app
+            imageViewAddImageDisplay.setVisibility(View.VISIBLE);
+        }
+
+        else if (requestCode == 3 && resultCode == RESULT_OK && data != null){
+//            File selection
+            pdfUri = data.getData();
+
+            // Get file name to display
+            String fileName = getFileName(pdfUri);
+            textViewPdfNameDisplay.setText(fileName); // Show selected file name
+            textViewPdfNameDisplay.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void addMedia(Uri uri, Item item, boolean isImage){
+        final StorageReference fileRef = reference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
+        fileRef.putFile(uri).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(getContext(), "Item added", Toast.LENGTH_SHORT).show();
+                fileRef.getDownloadUrl().addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        String downloadUrl = task2.getResult().toString();
+
+                        if (isImage) {
+                            item.setImageUrl(downloadUrl);
+                        } else {
+                            item.setFileUrl(downloadUrl);
+                        }
+
+                        itemsRef.child(item.getId()).setValue(item).addOnCompleteListener(task3 -> {
+                            if (task3.isSuccessful()) {
+                                String mediaType = isImage ? "image" : "file";
+                                Toast.makeText(getContext(), "Item added with " + mediaType, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Failed to add media link", Toast.LENGTH_SHORT).show();
+                    }
+                });
             } else {
-                Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to upload media", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void addBoth(Uri imageUri, Uri pdfUri, Item item) {
+        // First upload image
+        final StorageReference imageRef = reference.child(System.currentTimeMillis() + "_image." + getFileExtension(imageUri));
+        imageRef.putFile(imageUri).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                imageRef.getDownloadUrl().addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        // Set image URL
+                        item.setImageUrl(task2.getResult().toString());
+
+                        // Now upload PDF
+                        final StorageReference pdfRef = reference.child(System.currentTimeMillis() + "_pdf." + getFileExtension(pdfUri));
+                        pdfRef.putFile(pdfUri).addOnCompleteListener(task3 -> {
+                            if (task3.isSuccessful()) {
+                                pdfRef.getDownloadUrl().addOnCompleteListener(task4 -> {
+                                    if (task4.isSuccessful()) {
+                                        // Set PDF URL
+                                        item.setFileUrl(task4.getResult().toString());
+
+                                        // Save item with both URLs
+                                        itemsRef.child(item.getId()).setValue(item).addOnCompleteListener(task5 -> {
+                                            if (task5.isSuccessful()) {
+                                                Toast.makeText(getContext(), "Item added with image and PDF", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else {
+                                        Toast.makeText(getContext(), "Failed to get PDF download URL", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(getContext(), "Failed to upload PDF", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getContext(), "Failed to get image download URL", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getFileExtension(Uri mUri){
+
+        ContentResolver cr = requireActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(mUri));
+
+    }
+
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = requireActivity().getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {  // Check if column exists
+                        result = cursor.getString(nameIndex);
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
+    private void setTextNull(){
+        editTextTitle.setText(null);
+        editTextDate.setText(null);
+        editTextDescription.setText(null);
+
+        editTextGovId.setText(null);
+        editTextCourtOrders.setText(null);
+
+        editTextName.setText(null);
+        editTextRelationship.setText(null);
+        editTextPhone.setText(null);
+
+        editTextAddress.setText(null);
+        editTextNote.setText(null);
+
+        editTextMedName.setText(null);
+        editTextDosage.setText(null);
+
+        imageUri = null;
+        imageViewAddImageDisplay.setVisibility(View.GONE); //need to change this now
+
+        pdfUri = null;
+        textViewPdfNameDisplay.setVisibility(View.GONE);
     }
 }

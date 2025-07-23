@@ -115,11 +115,58 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDosage"/>
 
+    <ImageView
+        android:id="@+id/imageViewAddImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/baseline_add_photo_alternate_24"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDescription"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewAddPdf"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_marginEnd="16dp" />
+
+    <ImageView
+        android:id="@+id/imageViewAddPdf"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/outline_add_notes_24"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDescription"
+        app:layout_constraintStart_toEndOf="@+id/imageViewAddImage" />
+
+    <ImageView
+        android:id="@+id/imageViewAddImageDisplay"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/baseline_add_photo_alternate_24"
+        android:visibility="gone"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewAddPdf"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/textViewPdfNameDisplay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/outline_add_notes_24"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewAddImageDisplay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
     <Spinner
         android:id="@+id/spinnerCategory"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDescription"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPdfNameDisplay"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

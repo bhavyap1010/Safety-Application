@@ -15,6 +15,8 @@ public class Item {
     private String notes;
     private String medName;
     private String dosage;
+    private String imageUrl;
+    private String pdfUrl;
 
     public Item() {}
 
@@ -53,4 +55,9 @@ public class Item {
     public void setMedName(String medName) { this.medName = medName; }
     public String getDosage() { return dosage; }
     public void setDosage(String dosage) { this.dosage = dosage; }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getFileUrl() { return pdfUrl; }
+    public void setFileUrl(String pdfUrl) { this.pdfUrl = pdfUrl; }
+
 }
