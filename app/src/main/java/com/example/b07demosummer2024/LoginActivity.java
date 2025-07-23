@@ -3,7 +3,6 @@ package com.example.b07demosummer2024;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -60,25 +59,25 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Google sign in launcher
         googleSignInLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                Log.d(TAG, "Google Sign-In result code: " + result.getResultCode());
-                if (result.getResultCode() == RESULT_OK) {
-                    Intent data = result.getData();
-                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                    try {
-                        GoogleSignInAccount account = task.getResult(ApiException.class);
-                        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                        firebaseAuthWithGoogle(account.getIdToken());
-                    } catch (ApiException e) {
-                        Log.w(TAG, "Google sign in failed with code: " + e.getStatusCode(), e);
-                        Toast.makeText(this, "Google sign in failed: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Log.d(TAG, "Google Sign-In result code: " + result.getResultCode());
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                        try {
+                            GoogleSignInAccount account = task.getResult(ApiException.class);
+                            Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+                            firebaseAuthWithGoogle(account.getIdToken());
+                        } catch (ApiException e) {
+                            Log.w(TAG, "Google sign in failed with code: " + e.getStatusCode(), e);
+                            Toast.makeText(this, "Google sign in failed: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Log.d(TAG, "Google sign in cancelled or failed");
+                        Toast.makeText(this, "Google sign in cancelled", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Log.d(TAG, "Google sign in cancelled or failed");
-                    Toast.makeText(this, "Google sign in cancelled", Toast.LENGTH_SHORT).show();
                 }
-            }
         );
     }
 
@@ -114,13 +113,13 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         mAuth.sendPasswordResetEmail(email)
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(this, "Password reset email sent", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Failed to send reset email", Toast.LENGTH_SHORT).show();
-                }
-            });
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Password reset email sent", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Failed to send reset email", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void loginWithEmail() {
