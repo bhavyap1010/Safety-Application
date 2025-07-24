@@ -73,6 +73,7 @@ public class DeleteItemFragment extends Fragment {
                         snapshot.getRef().removeValue().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getContext(), "Item deleted", Toast.LENGTH_SHORT).show();
+                                editTextTitle.setText(null);
                             } else {
                                 Toast.makeText(getContext(), "Failed to delete item", Toast.LENGTH_SHORT).show();
                             }

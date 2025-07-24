@@ -113,8 +113,6 @@ public class AddItemFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 addItem();
-                setTextNull();
-
             }
         });
 
@@ -254,6 +252,7 @@ public class AddItemFragment extends Fragment {
             itemsRef.child(id).setValue(item).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "Item added", Toast.LENGTH_SHORT).show();
+                    setTextNull();
                 } else {
                     Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
                 }
@@ -300,6 +299,7 @@ public class AddItemFragment extends Fragment {
                             if (task3.isSuccessful()) {
                                 String mediaType = isImage ? "image" : "file";
                                 Toast.makeText(getContext(), "Item added with " + mediaType, Toast.LENGTH_SHORT).show();
+                                setTextNull();
                             } else {
                                 Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
                             }
@@ -338,6 +338,7 @@ public class AddItemFragment extends Fragment {
                                         itemsRef.child(item.getId()).setValue(item).addOnCompleteListener(task5 -> {
                                             if (task5.isSuccessful()) {
                                                 Toast.makeText(getContext(), "Item added with image and PDF", Toast.LENGTH_SHORT).show();
+                                                setTextNull();
                                             } else {
                                                 Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
                                             }
