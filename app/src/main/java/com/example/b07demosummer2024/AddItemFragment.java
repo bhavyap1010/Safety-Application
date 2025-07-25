@@ -24,6 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.widget.AdapterView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,7 +33,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class AddItemFragment extends Fragment {
-
     //documents
     private EditText editTextTitle, editTextDate, editTextDescription;
     private EditText editTextGovId, editTextCourtOrders;
@@ -47,7 +48,6 @@ public class AddItemFragment extends Fragment {
     private DatabaseReference itemsRef;
     private StorageReference reference;
     private Uri imageUri, pdfUri;
-
 
     @Nullable
     @Override
@@ -218,7 +218,17 @@ public class AddItemFragment extends Fragment {
             return;
         }
 
-        itemsRef = db.getReference("categories/" + category);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            // User not authenticated, redirect to login
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            getActivity().finish();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        itemsRef = db.getReference("users/" + userId + "/categories/" + category);
         String id = itemsRef.push().getKey();
         Item item = new Item(id, title, description, date);
 
@@ -243,11 +253,11 @@ public class AddItemFragment extends Fragment {
         }
 
         if (imageUri != null && pdfUri != null){
-            addBoth(imageUri, pdfUri, item);
+            addBoth(imageUri, pdfUri, item, userId);
         } else if (imageUri != null) {
-            addMedia(imageUri, item, true);
+            addMedia(imageUri, item, true, userId);
         } else if (pdfUri != null) {
-            addMedia(pdfUri, item, false);
+            addMedia(pdfUri, item, false, userId);
         } else {
             itemsRef.child(id).setValue(item).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -281,8 +291,8 @@ public class AddItemFragment extends Fragment {
         }
     }
 
-    private void addMedia(Uri uri, Item item, boolean isImage){
-        final StorageReference fileRef = reference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
+    private void addMedia(Uri uri, Item item, boolean isImage, String userId){
+        final StorageReference fileRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(uri));
         fileRef.putFile(uri).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 fileRef.getDownloadUrl().addOnCompleteListener(task2 -> {
@@ -315,9 +325,9 @@ public class AddItemFragment extends Fragment {
         });
     }
 
-    private void addBoth(Uri imageUri, Uri pdfUri, Item item) {
+    private void addBoth(Uri imageUri, Uri pdfUri, Item item, String userId) {
         // First upload image
-        final StorageReference imageRef = reference.child(System.currentTimeMillis() + "_image." + getFileExtension(imageUri));
+        final StorageReference imageRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(imageUri));
         imageRef.putFile(imageUri).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 imageRef.getDownloadUrl().addOnCompleteListener(task2 -> {
@@ -326,7 +336,7 @@ public class AddItemFragment extends Fragment {
                         item.setImageUrl(task2.getResult().toString());
 
                         // Now upload PDF
-                        final StorageReference pdfRef = reference.child(System.currentTimeMillis() + "_pdf." + getFileExtension(pdfUri));
+                        final StorageReference pdfRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(pdfUri));
                         pdfRef.putFile(pdfUri).addOnCompleteListener(task3 -> {
                             if (task3.isSuccessful()) {
                                 pdfRef.getDownloadUrl().addOnCompleteListener(task4 -> {

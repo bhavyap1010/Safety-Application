@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseDatabase db;
+//    private FirebaseDatabase db;
     private FirebaseAuth mAuth;
 
     @Override
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance(); //maybe just have this in AddItem
 
         // Check if user is authenticated
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        db = FirebaseDatabase.getInstance("https://b07-demo-summer-2024-default-rtdb.firebaseio.com/");
-        DatabaseReference myRef = db.getReference("testDemo");
+//        db = FirebaseDatabase.getInstance("https://b07-demo-summer-2024-default-rtdb.firebaseio.com/");
+ //       DatabaseReference myRef = db.getReference("testDemo");
 
 //        myRef.setValue("B07 Demo!");
 //        myRef.child("movies").setValue("B07 Demo!");
