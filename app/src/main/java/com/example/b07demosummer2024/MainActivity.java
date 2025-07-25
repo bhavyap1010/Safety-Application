@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     List<PlanItem> items;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
         // Check if user is authenticated
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
@@ -94,6 +97,7 @@ if(task.getResult().getValue(Integer.class) !=null) {
         if (tipTemplate == null) {
             tipTemplate = "Error generating tip for this question";
         }
+
 
         tipTemplate = tipTemplate.replace("{user_answer}", answer);
 
