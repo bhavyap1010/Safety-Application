@@ -1,0 +1,126 @@
+[
+	{
+		"id": "wu_01",
+		"question": "Which best describes your situation?",
+		"tips": {
+			"Still in a relationship": "Keep this plan updated, and remember you can always reach out if things escalate.",
+			"Planning to leave": "Start packing small items now so you're ready when you decide to leave.",
+			"Post-separation": "It's normal to feel unsettled, refer back to this plan whenever you need a safety reminder."
+		}
+	},
+	{
+		"id": "wu_02",
+		"question": "What city do you live in?",
+		"tips": {
+			"default": "Save the local support numbers for {user_answer} in your phone’s speed-dial so you can call immediately if you need help."
+		}
+	},
+	{
+		"id": "wu_03",
+		"question": "Which room in your home feels the safest if you need to get away quickly?",
+		"tips": {
+			"default": "Keep your essentials (phone, keys, and a small flashlight) in {user_answer} so you can grab them instantly when you need to leave."
+		}
+	},
+	{
+		"id": "wu_04",
+		"question": "Who do you live with?",
+		"tips": {
+			"Family": "Let those you live with know your safe room and cue-word so they can support you in an emergency.",
+			"Roommates": "Let those you live with know your safe room and cue-word so they can support you in an emergency.",
+			"Alone": "Since you live alone, identify a trusted neighbor or friend and share your safe room location with them.",
+			"Partner": "Because you live with your partner, keep your safety plan hidden (in {user_answer}), and consider storing a digital copy in a password-protected note they won’t see."
+		}
+	},
+	{
+		"id": "wu_05",
+		"question": "Do you have children?",
+		"tips": {
+			"Yes": "Practice your safety plan with your children so that when they hear {user_answer}, they know exactly what to do.",
+			"No": "Even without children, it helps to identify a second safe place in your home."
+		}
+	},
+	{
+		"id": "sr_01",
+		"question": "Which form(s) of abuse are you experiencing?",
+		"tips": {
+			"default": "If you face {user_answer} abuse, remember you don’t have to face it alone. Reach out to your emergency contact right away."
+		}
+	},
+	{
+		"id": "sr_02",
+		"question": "Are you recording the incidents (dates, times, details)?",
+		"tips": {
+			"Yes": "Log each incident (date, time, and a brief note) so you have clear records if needed later.",
+			"No": "Even brief notes on your phone can be helpful. Start logging today."
+		}
+	},
+	{
+		"id": "sr_03",
+		"question": "Name one person you can call immediately in an emergency?",
+		"tips": {
+			"default": "Save {user_answer} in your phone under a code-word so you can quietly call them when you need help."
+		}
+	},
+	{
+		"id": "pl_01",
+		"question": "When do you plan to leave?",
+		"tips": {
+			"default": "Set a real target {user_answer} and pack one essential item each day until you're ready."
+		}
+	},
+	{
+		"id": "pl_02",
+		"question": "Do you have a go-bag packed with essentials?",
+		"tips": {
+			"Yes": "Great! Keep your go-bag in a hidden spot so you can grab it quickly.",
+			"No": "Pack a simple go-bag today with essentials like your ID, some cash, and a charger."
+		}
+	},
+	{
+		"id": "pl_03",
+		"question": "Where do you keep emergency cash or cards?",
+		"tips": {
+			"default": "Stash some cash and a spare card in {user_answer}, a spot your partner won’t suspect."
+		}
+	},
+	{
+		"id": "pl_04",
+		"question": "Have you identified a safe place to stay?",
+		"tips": {
+			"Yes": "Make sure {user_answer} knows you may arrive unexpectedly and how to contact you.",
+			"No": "Reach out to Victim Services Toronto or a trusted friend now to secure a shelter option before you leave."
+		}
+	},
+	{
+		"id": "ps_01",
+		"question": "Has the abuser continued any contact?",
+		"tips": {
+			"Yes": "Since you’ve heard from them, stay vigilant and keep your protection order handy if you have one.",
+			"No": "Even without contact, keep your doors locked and your phone on in case you need to call 911."
+		}
+	},
+	{
+		"id": "ps_02",
+		"question": "Do you have a protection order? If yes, which type?",
+		"tips": {
+			"Yes": "Carry your {user_answer} at all times and share copies with anyone who needs to know.",
+			"No": "Consider applying for a protection order; it can help deter unwanted contact."
+		}
+	},
+	{
+		"id": "ps_03",
+		"question": "Are you using any safety tools (cameras, door alarms)?",
+		"tips": {
+			"Yes": "Make sure your {user_answer} is in working order and placed where you'll notice it.",
+			"No": "Consider installing a simple door alarm or camera to alert you to unexpected entry."
+		}
+	},
+	{
+		"id": "fu_01",
+		"question": "Which type of support would help most right now?",
+		"tips": {
+			"default": "Reach out to {user_answer} - they can offer the specialized help you need right now."
+		}
+	}
+]

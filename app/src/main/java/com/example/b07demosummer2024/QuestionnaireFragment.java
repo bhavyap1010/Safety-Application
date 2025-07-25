@@ -69,7 +69,7 @@ class Question {
 public class QuestionnaireFragment extends Fragment {
     FirebaseDatabase rootNode;
     DatabaseReference ref;
-    int Qnum=1;
+    int Qnum=0;
     public TextView question;
     Button next;
     Button back;
@@ -83,6 +83,8 @@ public class QuestionnaireFragment extends Fragment {
     int clicked =0;
 
     int ind=0;
+    public String userNow;
+
 
     @Nullable
     @Override
@@ -98,7 +100,6 @@ public class QuestionnaireFragment extends Fragment {
         buttons = v.findViewById(R.id.ButtonStorage);
         qNum = v.findViewById(R.id.qNum);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String userNow;
         if (user != null) {
             userNow = user.getUid();
         } else {
@@ -117,24 +118,22 @@ public class QuestionnaireFragment extends Fragment {
 
                 String response = input.getText().toString();
                 if(x.c == null) {
-                    if(Qnum==1) {
-                        x = allQuestions.get(Qnum-1);
-                        ref.child(userNow).child(x.id).setValue(response);
-                    }
+
+
                     ref.child(userNow).child(x.id).setValue(response);
 
 
                 }
                 int c = allQuestions.size() - 1;
                 Qnum++;
-                qNum.setText(String.valueOf(Qnum));
+                qNum.setText(String.valueOf(Qnum+1));
                 if(Qnum<=c) {
 
 
                      Question x2 = allQuestions.get(Qnum);
 
 
-                    ref.child(userNow).child(x.id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    ref.child(userNow).child(x2.id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             input.setVisibility(View.VISIBLE);
@@ -157,6 +156,7 @@ public class QuestionnaireFragment extends Fragment {
 
                 }else {
                     question.setText("Thanks!!!");
+                    ((MainActivity) requireActivity()).nowPlan();
                 }
             }
         });
@@ -171,27 +171,22 @@ public class QuestionnaireFragment extends Fragment {
                 if (Qnum>0){
 
                     Qnum--;
-                    qNum.setText(String.valueOf(Qnum));
+                    qNum.setText(String.valueOf(Qnum+1));
                     rootNode = FirebaseDatabase.getInstance();
                     ref = rootNode.getReference("users");
                     Question x;
                     x = allQuestions.get(Qnum);
 
-                    if(Qnum==1) {
-                        x = allQuestions.get(Qnum-1);
-                    }
-                    String user = "Hamed";
 
-                    ref.child(user).child(x.id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+
+                    ref.child(userNow).child(x.id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             input.setVisibility(View.VISIBLE);
                             Question x;
                             x = allQuestions.get(Qnum);
 
-                            if(Qnum==1) {
-                                x = allQuestions.get(Qnum-1);
-                            }
+
 
                             if(task.isSuccessful() && task.getResult().exists() && x.c == null) {
                                 input.setText(String.valueOf(task.getResult().getValue()));
@@ -225,7 +220,7 @@ public class QuestionnaireFragment extends Fragment {
 
         if(index<=c) {
 
-            Question x = allQuestions.get(index-1);
+            Question x = allQuestions.get(index);
             question.setText(x.qs);
 
             if (x.c != null) {
@@ -243,9 +238,8 @@ public class QuestionnaireFragment extends Fragment {
                             String current = x.c.get(finalI);
                             rootNode = FirebaseDatabase.getInstance();
                             ref = rootNode.getReference("users");
-                            String user = "Hamed";
                             String response = current;
-                            ref.child(user).child(x.id).setValue(response);
+                            ref.child(userNow).child(x.id).setValue(response);
 
 
 
@@ -261,11 +255,13 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private void statusGetter() {
+        qNum.setVisibility(View.GONE);
+
         question.setText("Which best describes your situation?");
         String[] choicesS = {"Still in a Relationship", "Planning to Leave", "Post-Separation"};
 
         buttons.removeAllViews();
-        qNum.setText(String.valueOf(Qnum));
+        qNum.setText(String.valueOf(Qnum+1));
 
         for(int i=0; i<3; i++) {
 
@@ -282,6 +278,8 @@ public class QuestionnaireFragment extends Fragment {
 
                     statchoice = current;
                     buttons.removeAllViews();
+                    qNum.setVisibility(View.VISIBLE);
+
                     readJson();
 
 
