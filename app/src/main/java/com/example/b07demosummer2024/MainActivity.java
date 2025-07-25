@@ -19,6 +19,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import android.content.SharedPreferences;
 import androidx.appcompat.app.AlertDialog;
+import android.widget.Button;
+import android.content.Intent;
+import android.net.Uri;
 
 public class MainActivity extends AppCompatActivity {
 
