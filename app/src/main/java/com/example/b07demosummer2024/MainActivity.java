@@ -17,17 +17,17 @@ import android.content.Intent;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-//Start of new
 import android.content.SharedPreferences;
 import androidx.appcompat.app.AlertDialog;
 import android.widget.Button;
 import android.content.Intent;
 import android.net.Uri;
-//End of new
 
 public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase db;
+    private static final String PREFS_NAME = "prefs";
+    private static final String KEY_PRIVACY_AGREED = "privacy_agreed";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
         });
         //End of new
 
+        /*To always have the privacy notice, uncomment the code below.
+        * Otherwise, the privacy notice only pops up the first time someone
+        * runs the app.*/
+        /*
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                .edit()
+                .remove(KEY_PRIVACY_AGREED)
+                .apply();
+        */
+        showPrivacyDialogIfNeeded();
         db = FirebaseDatabase.getInstance("https://b07-demo-summer-2024-default-rtdb.firebaseio.com/");
         DatabaseReference myRef = db.getReference("testDemo");
 
@@ -71,4 +81,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void showPrivacyDialogIfNeeded() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean agreed = prefs.getBoolean(KEY_PRIVACY_AGREED, false);
+
+        if (!agreed) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.privacy_notice_title))
+                    .setMessage(getString(R.string.privacy_notice_msg))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.agree, (d, w) -> {
+                        prefs.edit().putBoolean(KEY_PRIVACY_AGREED, true).apply();
+                        // user continues into the app
+                    })
+                    .setNegativeButton(R.string.disagree, (d, w) -> {
+                        // app exits
+                        finishAffinity();
+                    })
+                    .show();
+        }
+    }
 }

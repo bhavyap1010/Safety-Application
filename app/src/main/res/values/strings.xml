@@ -15,4 +15,13 @@
         <item>Movies</item>
     </string-array>
 
+    <string name="privacy_notice_title">Privacy Notice</string>
+    <string name="privacy_notice_msg">
+        By using this app I agree to have my personal information such as my name,
+        address, phone number, etc., stored in this application.
+        We will not use your information outside of this application.
+    </string>
+    <string name="agree">Agree</string>
+    <string name="disagree">Disagree</string>
+
 </resources>
