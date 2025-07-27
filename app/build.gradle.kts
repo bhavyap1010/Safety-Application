@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
+    implementation(libs.security.crypto.v100)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

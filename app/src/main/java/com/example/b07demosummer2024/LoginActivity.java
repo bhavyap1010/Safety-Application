@@ -38,10 +38,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> googleSignInLauncher;
 
+    private PinManager pinManager; // Add this
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        pinManager = new PinManager();
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -88,8 +91,23 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            startMainActivity();
+            if (pinManager.isPinEnabled(this)) {
+                // PIN is set up, go to PIN login screen
+                launchPinLoginActivity();
+            } else {
+                // PIN not set up, but user is logged in (e.g., from a previous session before PIN feature)
+                // Decide the flow: go to main activity or prompt for PIN setup.
+                // For now, let's assume if Firebase user exists and no PIN, go to main.
+                // Or, you could force PIN setup here as well.
+                startMainActivity();
+            }
         }
+    }
+
+    private void launchPinLoginActivity() {
+        Intent intent = new Intent(LoginActivity.this, PinLoginActivity.class);
+        startActivity(intent);
+        finish(); // Prevent going back to LoginActivity
     }
 
     private void initializeViews() {
@@ -174,28 +192,28 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LoginActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                            startMainActivity();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Exception exception = task.getException();
-                            String errorMessage = "Registration failed";
-                            if (exception != null) {
-                                errorMessage = "Registration failed: " + exception.getMessage();
-                                Log.e(TAG, "Full error: " + exception.toString());
-                            }
-                            Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "createUserWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(LoginActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                        launchPinSetupActivity();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        Exception exception = task.getException();
+                        String errorMessage = "Registration failed";
+                        if (exception != null) {
+                            errorMessage = "Registration failed: " + exception.getMessage();
+                            Log.e(TAG, "Full error: " + exception.toString());
                         }
+                        Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                     }
-                });
+                }
+            });
     }
 
     private void signInWithGoogle() {
@@ -226,9 +244,17 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void startMainActivity() {
+    void startMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish(); // Close login activity so user can't go back to it
+    }
+
+    private void launchPinSetupActivity() {
+        Intent intent = new Intent(LoginActivity.this, PinSetupActivity.class);
+        // You might want to pass the user's email or ID if needed in PinSetupActivity
+        // intent.putExtra("USER_EMAIL", mAuth.getCurrentUser().getEmail());
+        startActivity(intent);
+        finish(); // Optional: finish LoginActivity if you don't want users to go back
     }
 }
