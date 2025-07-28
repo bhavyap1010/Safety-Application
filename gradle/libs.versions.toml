@@ -31,4 +31,3 @@ security-crypto-v100 = { module = "androidx.security:security-crypto", version.r
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
-
