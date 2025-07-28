@@ -8,4 +8,9 @@
         android:icon="@android:drawable/ic_menu_revert"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_change_pin"
+        android:title="Change pin"
+        app:showAsAction="never" />
+
 </menu>
