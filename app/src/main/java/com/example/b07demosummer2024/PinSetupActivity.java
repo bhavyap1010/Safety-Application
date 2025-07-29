@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class PinSetupActivity extends AppCompatActivity {
 
     private EditText editTextPin, editTextConfirmPin;
@@ -18,19 +20,27 @@ public class PinSetupActivity extends AppCompatActivity {
     private static final String PREFERENCE_FILE_KEY = "com.example.b07demosummer2024.PIN_PREFS";
     private static final String PIN_KEY = "user_pin";
 
+    private FirebaseAuth mAuth;
+
     private PinManager pinManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin_setup);
+
         pinManager = new PinManager();
+
+        mAuth = FirebaseAuth.getInstance();
+        String userID = mAuth.getCurrentUser().getUid();
+
         editTextPin = findViewById(R.id.editTextPin);
+
         editTextConfirmPin = findViewById(R.id.editTextConfirmPin);
         buttonSubmitPin = findViewById(R.id.buttonSubmitPin);
         buttonCancelPinSetup = findViewById(R.id.buttonCancelPinSetup);
 
-        buttonSubmitPin.setOnClickListener(v -> setupPin());
+        buttonSubmitPin.setOnClickListener(v -> setupPin(userID));
         buttonCancelPinSetup.setOnClickListener(v -> {
             // Navigate back to login or handle cancellation appropriately
             // For now, let's go back to LoginActivity
@@ -40,7 +50,7 @@ public class PinSetupActivity extends AppCompatActivity {
         });
     }
 
-    private void setupPin() {
+    private void setupPin(String userID) {
         String pin = editTextPin.getText().toString();
         String confirmPin = editTextConfirmPin.getText().toString();
 
@@ -55,7 +65,7 @@ public class PinSetupActivity extends AppCompatActivity {
         }
 
         // PIN is valid, save it securely
-        if (pinManager.storePin(this, pin)) { // Use PinManager
+        if (pinManager.storePin(this, pin, userID)) { // Use PinManager
             Toast.makeText(this, "PIN setup successful!", Toast.LENGTH_SHORT).show();
 
             // Navigate back to LoginActivity

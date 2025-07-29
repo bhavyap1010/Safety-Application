@@ -26,16 +26,17 @@ public class PinLoginActivity extends AppCompatActivity {
 
         pinManager = new PinManager();
         mAuth = FirebaseAuth.getInstance();
+        String userID = mAuth.getCurrentUser().getUid();
 
         editTextLoginPin = findViewById(R.id.editTextLoginPin);
         buttonUnlock = findViewById(R.id.buttonUnlock);
         buttonSwitchToEmailLogin = findViewById(R.id.buttonSwitchToEmailLogin);
 
-        buttonUnlock.setOnClickListener(v -> verifyAndLogin());
+        buttonUnlock.setOnClickListener(v -> verifyAndLogin(userID));
         buttonSwitchToEmailLogin.setOnClickListener(v -> switchToEmailLogin());
     }
 
-    private void verifyAndLogin() {
+    private void verifyAndLogin(String userID) {
         String enteredPin = editTextLoginPin.getText().toString();
 
         if (TextUtils.isEmpty(enteredPin) || enteredPin.length() != 4 || !TextUtils.isDigitsOnly(enteredPin)) {
@@ -43,7 +44,7 @@ public class PinLoginActivity extends AppCompatActivity {
             return;
         }
 
-        if (pinManager.verifyPin(this, enteredPin)) {
+        if (pinManager.verifyPin(this, enteredPin, userID)) {
             Toast.makeText(this, "PIN correct. Logging in...", Toast.LENGTH_SHORT).show();
             loginAttempts = 0; // Reset attempts on success
             // Navigate to your app's main screen
@@ -73,7 +74,7 @@ public class PinLoginActivity extends AppCompatActivity {
         }
         // Also clear the PIN enabled flag so onStart() in LoginActivity doesn't redirect here.
         // This means they'll have to set up PIN again after email login if they wish.
-        pinManager.clearPin(this); // This makes them go through PIN setup again after email login
+        pinManager.clearPin(this, mAuth.getCurrentUser().getUid()); // This makes them go through PIN setup again after email login
 
         Intent intent = new Intent(PinLoginActivity.this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

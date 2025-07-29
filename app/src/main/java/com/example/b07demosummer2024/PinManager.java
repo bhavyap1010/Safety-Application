@@ -1,12 +1,17 @@
 // PinManager.java
-package com.example.b07demosummer2024; // Use your actual package name
+package com.example.b07demosummer2024;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
+
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class PinManager {
 
@@ -20,23 +25,20 @@ public class PinManager {
         return EncryptedSharedPreferences.create(
                 masterKeyAlias,
                 PREFERENCE_FILE_KEY,
-                context, // Use application context or activity context
+                context,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         );
     }
 
     // Call this after successful registration and PIN setup
-    public boolean storePin(Context context, String pin) {
-        // IMPORTANT: Hash the PIN before storing it!
-        // String hashedPin = hashFunction(pin); // Implement your hashing function
-        // For this example, storing directly (NOT RECOMMENDED FOR PRODUCTION)
-        String hashedPin = pin; // Replace with actual hashing
+    public boolean storePin(Context context, String pin, String userID) {
+        String hashedPin = hashFunction(pin);
 
         try {
             SharedPreferences.Editor editor = getEncryptedSharedPreferences(context).edit();
-            editor.putString(PIN_KEY, hashedPin);
-            editor.putBoolean(PIN_ENABLED_KEY, true);
+            editor.putString(PIN_KEY + userID, hashedPin);
+            editor.putBoolean(PIN_ENABLED_KEY + userID, true);
             editor.apply();
             return true;
         } catch (GeneralSecurityException | IOException e) {
@@ -46,14 +48,11 @@ public class PinManager {
     }
 
     // Call this during PIN login to verify
-    public boolean verifyPin(Context context, String enteredPin) {
-        // IMPORTANT: Hash the enteredPin using the SAME hashing function and parameters
-        // String hashedEnteredPin = hashFunction(enteredPin);
-        // For this example, direct comparison (NOT RECOMMENDED FOR PRODUCTION)
-        String hashedEnteredPin = enteredPin; // Replace with actual hashing
+    public boolean verifyPin(Context context, String enteredPin, String userID) {
+        String hashedEnteredPin = hashFunction(enteredPin);
 
         try {
-            String storedHashedPin = getEncryptedSharedPreferences(context).getString(PIN_KEY, null);
+            String storedHashedPin = getEncryptedSharedPreferences(context).getString(PIN_KEY + userID, null);
             return storedHashedPin != null && storedHashedPin.equals(hashedEnteredPin);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
@@ -61,20 +60,20 @@ public class PinManager {
         }
     }
 
-    public boolean isPinEnabled(Context context) {
+    public boolean isPinEnabled(Context context, String userID) {
         try {
-            return getEncryptedSharedPreferences(context).getBoolean(PIN_ENABLED_KEY, false);
+            return getEncryptedSharedPreferences(context).getBoolean(PIN_ENABLED_KEY + userID, false);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public void clearPin(Context context) {
+    public void clearPin(Context context, String userID) {
         try {
             SharedPreferences.Editor editor = getEncryptedSharedPreferences(context).edit();
-            editor.remove(PIN_KEY);
-            editor.putBoolean(PIN_ENABLED_KEY, false);
+            editor.remove(PIN_KEY + userID);
+            editor.putBoolean(PIN_ENABLED_KEY + userID, false);
             editor.apply();
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
@@ -82,8 +81,7 @@ public class PinManager {
     }
 
     // You'll need to implement a robust hashing function
-    // Example (conceptual, use a proper library like Argon2 or SCrypt):
-    /*
+    // Example (conceptual, use a proper library like Argon2 or SCrypt)
     private String hashFunction(String pin) {
         // Use a strong hashing algorithm with a salt.
         // For example, using SCrypt or Argon2 via a library.
@@ -97,5 +95,4 @@ public class PinManager {
             return null;
         }
     }
-    */
 }

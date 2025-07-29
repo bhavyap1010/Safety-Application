@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            if (pinManager.isPinEnabled(this)) {
+            if (pinManager.isPinEnabled(this, mAuth.getCurrentUser().getUid())) {
                 // PIN is set up, go to PIN login screen
                 launchPinLoginActivity();
             } else {
@@ -251,8 +251,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void launchPinSetupActivity() {
         Intent intent = new Intent(LoginActivity.this, PinSetupActivity.class);
-        // You might want to pass the user's email or ID if needed in PinSetupActivity
-        // intent.putExtra("USER_EMAIL", mAuth.getCurrentUser().getEmail());
         startActivity(intent);
         finish(); // Optional: finish LoginActivity if you don't want users to go back
     }
