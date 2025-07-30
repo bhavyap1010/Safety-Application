@@ -25,7 +25,6 @@ public class RecyclerViewFragment extends Fragment {
     private ItemAdapter itemAdapter;
     private List<Item> itemList;
     private Spinner spinnerCategory;
-
     private FirebaseDatabase db;
     private DatabaseReference itemsRef;
 

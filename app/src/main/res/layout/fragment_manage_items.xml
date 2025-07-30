@@ -7,11 +7,21 @@
     tools:context=".ManageItemsFragment">
 
     <Button
+        android:id="@+id/buttonViewItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/view_items"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAddItem"/>
+
+    <Button
         android:id="@+id/buttonAddItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/add_item"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonViewItem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/buttonDeleteItem"/>
