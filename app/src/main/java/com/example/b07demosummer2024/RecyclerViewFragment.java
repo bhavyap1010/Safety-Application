@@ -1,6 +1,8 @@
 package com.example.b07demosummer2024;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +32,7 @@ public class RecyclerViewFragment extends Fragment {
     private Spinner spinnerCategory;
     private FirebaseDatabase db;
     private DatabaseReference itemsRef;
+    private ValueEventListener currentListener;
 
     @Nullable
     @Override
@@ -46,7 +52,7 @@ public class RecyclerViewFragment extends Fragment {
         itemAdapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(itemAdapter);
 
-        db = FirebaseDatabase.getInstance("https://b07-demo-summer-2024-default-rtdb.firebaseio.com/");
+        db = FirebaseDatabase.getInstance("https://b07finalproject-23dae-default-rtdb.firebaseio.com/");
 
         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -63,24 +69,41 @@ public class RecyclerViewFragment extends Fragment {
 
         return view;
     }
-
     private void fetchItemsFromDatabase(String category) {
-        itemsRef = db.getReference("categories/" + category);
-        itemsRef.addValueEventListener(new ValueEventListener() {
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            // User not authenticated, redirect to login
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            getActivity().finish();
+            return;
+        }
+        String userId = currentUser.getUid();
+
+        if (itemAdapter != null) {
+            itemAdapter.setCurrentCategory(category); // Ensure category is set before data binding with new items
+        }
+
+        itemsRef = db.getReference("users/" + userId + "/categories/" + category);
+        currentListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 itemList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Item item = snapshot.getValue(Item.class);
-                    itemList.add(item);
+                    if (item != null) {
+                        itemList.add(item);
+                    }
                 }
                 itemAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle possible errors
+                Log.e("Firebase", "Error: " + databaseError.getMessage());
             }
-        });
+        };
+        itemsRef.addValueEventListener(currentListener);
     }
 }

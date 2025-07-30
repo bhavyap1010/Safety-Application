@@ -423,7 +423,7 @@ public class AddItemFragment extends Fragment {
         editTextDosage.setText(null);
 
         imageUri = null;
-        imageViewAddImageDisplay.setVisibility(View.GONE); //need to change this now
+        imageViewAddImageDisplay.setVisibility(View.GONE);
 
         pdfUri = null;
         textViewPdfNameDisplay.setVisibility(View.GONE);
