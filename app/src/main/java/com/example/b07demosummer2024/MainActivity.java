@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import android.widget.Button;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        /*To always have the privacy notice, uncomment the code below.
+        /*To always have the disclaimer, uncomment the code below.
         * Otherwise, the privacy notice only pops up the first time someone
         * runs the app.*/
         /*
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 .remove(KEY_PRIVACY_AGREED)
                 .apply();
         */
-        showPrivacyDialogIfNeeded();
+        showDisclaimer();
 
 
 //        myRef.setValue("B07 Demo!");
@@ -119,24 +120,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showPrivacyDialogIfNeeded() {
+    private void showDisclaimer() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean agreed = prefs.getBoolean(KEY_PRIVACY_AGREED, false);
+        if (prefs.getBoolean(KEY_PRIVACY_AGREED, false)) return;
 
-        if (!agreed) {
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.privacy_notice_title))
-                    .setMessage(getString(R.string.privacy_notice_msg))
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.agree, (d, w) -> {
-                        prefs.edit().putBoolean(KEY_PRIVACY_AGREED, true).apply();
-                        // user continues into the app
-                    })
-                    .setNegativeButton(R.string.disagree, (d, w) -> {
-                        // app exits
-                        finishAffinity();
-                    })
-                    .show();
-        }
+        // Inflate the custom layout
+        View noticeView = getLayoutInflater()
+                .inflate(R.layout.disclaimers, null, false);
+
+        new AlertDialog.Builder(this)
+                .setView(noticeView)          // << replaces setTitle / setMessage
+                .setCancelable(false)
+                .setPositiveButton(R.string.agree, (d, w) ->
+                        prefs.edit().putBoolean(KEY_PRIVACY_AGREED, true).apply())
+                .setNegativeButton(R.string.disagree, (d, w) -> finishAffinity())
+                .show();
     }
 }
