@@ -2,10 +2,15 @@ package com.example.b07demosummer2024;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
@@ -34,17 +39,55 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Item item = itemList.get(position);
         holder.textViewTitle.setText(item.getTitle());
-        holder.textViewDescription.setText(item.getDescription());
-        holder.textViewDate.setText(item.getDate());
-        holder.textViewGovId.setText(item.getGovId());
-        holder.textViewCourtOrders.setText(item.getCourtOrder());
-        holder.textViewName.setText(item.getName());
-        holder.textViewRelationship.setText(item.getRelationship());
-        holder.textViewPhone.setText(item.getPhone());
-        holder.textViewAddress.setText(item.getAddress());
-        holder.textViewNote.setText(item.getNotes());
-        holder.textViewMedName.setText(item.getMedName());
-        holder.textViewDosage.setText(item.getDosage());
+        holder.textViewDescription.setText("Description " + item.getDescription());
+        holder.textViewDate.setText("Date: " + item.getDate());
+        holder.textViewGovId.setText("ID: " + item.getGovId());
+        holder.textViewCourtOrders.setText("CourtOrders: " + item.getCourtOrder());
+        holder.textViewName.setText("Name: " + item.getName());
+        holder.textViewRelationship.setText("Relationship: " + item.getRelationship());
+        holder.textViewPhone.setText("Phone: " + item.getPhone());
+        holder.textViewAddress.setText("Address: " + item.getAddress());
+        holder.textViewNote.setText("Note: " + item.getNotes());
+        holder.textViewMedName.setText("Medication Name: " + item.getMedName());
+        holder.textViewDosage.setText("Dosage: " + item.getDosage());
+
+        holder.itemOptionsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { // 'v' is the clicked ImageView
+                PopupMenu popup = new PopupMenu(v.getContext(), v); // Use v.getContext()
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        int itemId = menuItem.getItemId();
+                        //Bring to edit page
+                        // You have access to 'item' (the data for this row)
+                        // and 'position' (the adapter position of this row)
+                        if (itemId == R.id.menu_edit) {
+                            Toast.makeText(v.getContext(), "Edit: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                            // TODO: Implement edit functionality for 'item'
+                            return true;
+                        } else if (itemId == R.id.menu_delete) {
+                            Toast.makeText(v.getContext(), "Delete: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                            // TODO: Implement delete functionality
+                            //Just bring to the delete page
+                            // Example:
+                            // if (position != RecyclerView.NO_POSITION) {
+                            //     itemList.remove(position);
+                            //     notifyItemRemoved(position);
+                            //     notifyItemRangeChanged(position, itemList.size());
+                            // }
+
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                });
+                popup.show();
+            }
+        });
 
         updateVisibilityBasedOnCategory(holder, item, currentCategory);
     }
@@ -120,7 +163,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView textViewTitle, textViewDescription, textViewDate, textViewGovId, textViewCourtOrders, textViewName, textViewRelationship, textViewPhone, textViewAddress, textViewNote, textViewMedName, textViewDosage;
-
+        ImageView itemOptionsImageView;
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
@@ -135,6 +178,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             textViewMedName = itemView.findViewById(R.id.textViewMedName);
             textViewDosage = itemView.findViewById(R.id.textViewDosage);
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
+            itemOptionsImageView = itemView.findViewById(R.id.imageView);
         }
     }
 }
