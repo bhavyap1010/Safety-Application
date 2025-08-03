@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -14,9 +15,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +38,7 @@ public class RecyclerViewFragment extends Fragment {
     private FirebaseDatabase db;
     private DatabaseReference itemsRef;
     private ValueEventListener currentListener;
+    private FloatingActionButton buttonAdd;
 
     @Nullable
     @Override
@@ -43,6 +47,7 @@ public class RecyclerViewFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        buttonAdd = view.findViewById(R.id.buttonAdd);
 
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -69,6 +74,13 @@ public class RecyclerViewFragment extends Fragment {
                 deleteItemFromFirebase(item, position);
             }
         });
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new AddItemFragment() );
+            }
+         });
 
         db = FirebaseDatabase.getInstance("https://b07finalproject-23dae-default-rtdb.firebaseio.com/");
 
@@ -174,5 +186,12 @@ public class RecyclerViewFragment extends Fragment {
                 Toast.makeText(getContext(), "Failed to delete item", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
