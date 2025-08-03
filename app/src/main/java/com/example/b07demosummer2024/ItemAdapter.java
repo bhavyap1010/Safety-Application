@@ -1,5 +1,7 @@
 package com.example.b07demosummer2024;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -41,6 +43,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         this.currentCategory = category != null ? category.toLowerCase() : "";
     }
 
+    // Add interface for delete callback
+    public interface OnItemDeleteClickListener {
+        void onDeleteClick(Item item, int position);
+    }
+
+    private OnItemDeleteClickListener deleteClickListener;
+
+    public void setOnItemDeleteClickListener(OnItemDeleteClickListener listener) {
+        this.deleteClickListener = listener;
+    }
+
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,7 +68,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.textViewDescription.setText("Description: " + item.getDescription());
         holder.textViewDate.setText("Date: " + item.getDate());
         holder.textViewGovId.setText("ID: " + item.getGovId());
-        holder.textViewCourtOrders.setText("CourtOrders: " + item.getCourtOrder());
+        holder.textViewCourtOrders.setText("Court Orders: " + item.getCourtOrder());
         holder.textViewName.setText("Name: " + item.getName());
         holder.textViewRelationship.setText("Relationship: " + item.getRelationship());
         holder.textViewPhone.setText("Phone: " + item.getPhone());
@@ -100,14 +113,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                             return true;
                         } else if (itemId == R.id.menu_delete) {
                             Toast.makeText(v.getContext(), "Delete: " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                            // TODO: Implement delete functionality
-                            // Example:
-                            // if (position != RecyclerView.NO_POSITION) {
-                            //     itemList.remove(position);
-                            //     notifyItemRemoved(position);
-                            //     notifyItemRangeChanged(position, itemList.size());
-                            // }
-
+                            showDeleteConfirmationDialog(v.getContext(), item, adapterPosition);
                             return true;
                         } else {
                             return false;
@@ -119,6 +125,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         });
 
         updateVisibilityBasedOnCategory(holder, item, currentCategory);
+    }
+
+    private void showDeleteConfirmationDialog(Context context, Item item, int position) {
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Item")
+                .setMessage("Are you sure you want to delete \"" + item.getTitle() + "\"?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    if (deleteClickListener != null) {
+                        deleteClickListener.onDeleteClick(item, position);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void updateVisibilityBasedOnCategory(@NonNull ItemViewHolder holder, Item item, String category) {
@@ -208,6 +227,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 }
             }
         });
+    }
+
+    // Add this method to your ItemAdapter class:
+    public void removeItem(String itemId) {
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).getId().equals(itemId)) {
+                itemList.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {

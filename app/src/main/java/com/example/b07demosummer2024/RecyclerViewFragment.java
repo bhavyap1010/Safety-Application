@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -62,6 +59,14 @@ public class RecyclerViewFragment extends Fragment {
             @Override
             public void onEditClick(Item item, int position) {
                 navigateToEditFragment(item);
+            }
+        });
+
+        // Set delete listener
+        itemAdapter.setOnItemDeleteClickListener(new ItemAdapter.OnItemDeleteClickListener() {
+            @Override
+            public void onDeleteClick(Item item, int position) {
+                deleteItemFromFirebase(item, position);
             }
         });
 
@@ -144,5 +149,30 @@ public class RecyclerViewFragment extends Fragment {
                 .replace(R.id.fragment_container, editFragment) // Make sure this ID matches your actual container
                 .addToBackStack(null)
                 .commit();
+    }
+    private void deleteItemFromFirebase(Item item, int position) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            Toast.makeText(getContext(), "Please log in to delete items", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        String category = item.getCategory().toLowerCase();
+
+        DatabaseReference itemRef = FirebaseDatabase.getInstance("https://b07finalproject-23dae-default-rtdb.firebaseio.com/")
+                .getReference("users/" + userId + "/categories/" + category + "/" + item.getId());
+
+        itemRef.removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Use adapter method
+                itemAdapter.removeItem(item.getId());
+                Toast.makeText(getContext(), "Item deleted successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Failed to delete item", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
