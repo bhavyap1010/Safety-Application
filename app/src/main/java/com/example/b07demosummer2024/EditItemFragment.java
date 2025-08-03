@@ -8,10 +8,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,20 +21,28 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import android.widget.AdapterView;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class AddItemFragment extends Fragment {
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+
+public class EditItemFragment extends Fragment {
     private EditText editTextTitle, editTextDate, editTextDescription;
     private EditText editTextGovId, editTextCourtOrders;
     private EditText editTextName, editTextRelationship, editTextPhone;
@@ -41,18 +51,38 @@ public class AddItemFragment extends Fragment {
     private ImageView imageViewAddImage, imageViewAddPdf;
     private ImageView imageViewAddImageDisplay;
     private TextView textViewPdfNameDisplay;
-    private Spinner spinnerCategory;
-    private Button buttonAdd;
+    private Button buttonSave;
     private FirebaseDatabase db;
     private DatabaseReference itemsRef;
     private StorageReference reference;
     private Uri imageUri, pdfUri;
+    private Item currentItem; // Store the item being edited
+    private boolean isEditMode = false; // Track if we're editing or creating
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_item, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_item, container, false);
 
+        initializeViews(view);
+        setupFirebase();
+
+        // Check if we're editing an existing item
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey("item_to_edit")) {
+            currentItem = (Item) bundle.getSerializable("item_to_edit");
+            isEditMode = true;
+            populateFieldsForEditing(currentItem);
+        } else {
+            isEditMode = false;
+        }
+
+        setupClickListeners();
+
+        return view;
+    }
+
+    private void initializeViews(View view) {
         editTextTitle = view.findViewById(R.id.editTextTitle);
         editTextDate = view.findViewById(R.id.editTextDate);
         editTextDescription = view.findViewById(R.id.editTextDescription);
@@ -76,18 +106,56 @@ public class AddItemFragment extends Fragment {
         imageViewAddImageDisplay = view.findViewById(R.id.imageViewAddImageDisplay);
         textViewPdfNameDisplay = view.findViewById(R.id.textViewPdfNameDisplay);
 
-        spinnerCategory = view.findViewById(R.id.spinnerCategory);
-        buttonAdd = view.findViewById(R.id.buttonAdd);
+        buttonSave = view.findViewById(R.id.buttonSave);
 
+    }
+    private void setupFirebase() {
         db = FirebaseDatabase.getInstance("https://b07finalproject-23dae-default-rtdb.firebaseio.com/");
         reference = FirebaseStorage.getInstance().getReference();
+    }
+    private void populateFieldsForEditing(Item item) {
+        editTextTitle.setText(item.getTitle());
+        editTextDescription.setText(item.getDescription());
+        editTextDate.setText(item.getDate());
 
-        // Set up the spinner with categories
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.categories_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(adapter);
+        // Populate category-specific fields
+        String category = item.getCategory();
+        if (category != null) {
+            switch (category.toLowerCase()) {
+                case "document":
+                    editTextGovId.setText(item.getGovId());
+                    editTextCourtOrders.setText(item.getCourtOrder());
+                    break;
+                case "emergency contact":
+                    editTextName.setText(item.getName());
+                    editTextRelationship.setText(item.getRelationship());
+                    editTextPhone.setText(item.getPhone());
+                    break;
+                case "safe location":
+                    editTextAddress.setText(item.getAddress());
+                    editTextNote.setText(item.getNotes());
+                    break;
+                case "medication":
+                    editTextMedName.setText(item.getMedName());
+                    editTextDosage.setText(item.getDosage());
+                    break;
+            }
+        }
 
+        displaySavedImage(item);
+
+        String fileName = item.getPdfName();
+        textViewPdfNameDisplay.setText(fileName); // Show selected file name
+        textViewPdfNameDisplay.setVisibility(View.VISIBLE);
+
+        onCategoryChanged(category);
+
+        // Update button text for edit mode
+        buttonSave.setText("Update Item");
+    }
+
+
+    private void setupClickListeners() {
         imageViewAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,32 +171,351 @@ public class AddItemFragment extends Fragment {
             public void onClick(View v) {
                 Intent fileIntent = new Intent();
                 fileIntent.setAction(Intent.ACTION_GET_CONTENT);
-                fileIntent.setType("application/pdf"); // Any file type
+                fileIntent.setType("application/pdf");
                 startActivityForResult(fileIntent, 3);
             }
         });
 
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+        buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addItem();
+                if (isEditMode) {
+                    updateItem();
+                } else {
+                    saveItem();
+                }
             }
         });
-
-        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = parent.getSelectedItem().toString().toLowerCase();
-                onCategoryChanged(selectedCategory);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Handle no selection
-            }
-        });
-        return view;
     }
+    private void saveItem() {
+        // Get text from EditText fields
+        String title = editTextTitle.getText().toString().trim();
+        String description = editTextDescription.getText().toString().trim();
+        String date = editTextDate.getText().toString().trim();
+
+        String govId = editTextGovId.getText().toString().trim();
+        String courtOrder = editTextCourtOrders.getText().toString().trim();
+
+        String name = editTextName.getText().toString().trim();
+        String relationship = editTextRelationship.getText().toString().trim();
+        String phone = editTextPhone.getText().toString().trim();
+
+        String address = editTextAddress.getText().toString().trim();
+        String note = editTextNote.getText().toString().trim();
+
+        String medName = editTextMedName.getText().toString().trim();
+        String dosage = editTextDosage.getText().toString().trim();
+
+        // Validation
+        if (title.isEmpty() || description.isEmpty()) {
+            Toast.makeText(getContext(), "Please fill out all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            if (getActivity() != null) getActivity().finish();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+
+        Item item;
+        String category;
+        String itemId;
+
+        if (isEditMode && currentItem != null) {
+            // EDITING EXISTING ITEM - Use existing item and ID
+            item = currentItem;
+            category = item.getCategory();
+            itemId = item.getId(); // Use existing ID, don't generate new one
+
+            // Update the item with new values
+            item.setTitle(title);
+            item.setDescription(description);
+            item.setDate(date);
+        } else {
+            // CREATING NEW ITEM - Generate new ID
+            Bundle bundle = getArguments();
+            if (bundle != null && bundle.containsKey("category")) {
+                category = bundle.getString("category");
+            } else {
+                Toast.makeText(getContext(), "Category not specified", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            itemsRef = db.getReference("users/" + userId + "/categories/" + category);
+            itemId = itemsRef.push().getKey(); // Generate new ID only for new items
+            item = new Item(itemId, title, description, date, category);
+        }
+
+        // Set the database reference for the category
+        itemsRef = db.getReference("users/" + userId + "/categories/" + category);
+
+        // Set category-specific fields based on category
+        switch (category.toLowerCase()) {
+            case "document":
+                item.setGovId(govId);
+                item.setCourtOrder(courtOrder);
+                break;
+            case "emergency contact":
+                item.setName(name);
+                item.setRelationship(relationship);
+                item.setPhone(phone);
+                break;
+            case "safe location":
+                item.setAddress(address);
+                item.setNotes(note);
+                break;
+            case "medication":
+                item.setMedName(medName);
+                item.setDosage(dosage);
+                break;
+        }
+    }
+
+    private void updateItem() {
+        if (currentItem == null) return;
+
+        String title = editTextTitle.getText().toString().trim();
+        String description = editTextDescription.getText().toString().trim();
+        String date = editTextDate.getText().toString().trim();
+
+        String govId = editTextGovId.getText().toString().trim();
+        String courtOrder = editTextCourtOrders.getText().toString().trim();
+
+        String name = editTextName.getText().toString().trim();
+        String relationship = editTextRelationship.getText().toString().trim();
+        String phone = editTextPhone.getText().toString().trim();
+
+        String address = editTextAddress.getText().toString().trim();
+        String note = editTextNote.getText().toString().trim();
+
+        String medName = editTextMedName.getText().toString().trim();
+        String dosage = editTextDosage.getText().toString().trim();
+
+        if (title.isEmpty() || description.isEmpty()) {
+            Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Update the current item
+        currentItem.setTitle(title);
+        currentItem.setDescription(description);
+        currentItem.setDate(date);
+
+        String category = currentItem.getCategory();
+        setCategorySpecificFields(currentItem, category, govId, courtOrder, name, relationship, phone, address, note, medName, dosage);
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            if (getActivity() != null) getActivity().finish();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        itemsRef = db.getReference("users/" + userId + "/categories/" + category);
+
+        // Handle media uploads for update
+        handleMediaUploads(currentItem, userId);
+    }
+
+    private void setCategorySpecificFields(Item item, String category, String govId, String courtOrder,
+                                           String name, String relationship, String phone, String address,
+                                           String note, String medName, String dosage) {
+        switch (category.toLowerCase()) {
+            case "document":
+                item.setGovId(govId);
+                item.setCourtOrder(courtOrder);
+                break;
+            case "emergency contact":
+                item.setName(name);
+                item.setRelationship(relationship);
+                item.setPhone(phone);
+                break;
+            case "safe location":
+                item.setAddress(address);
+                item.setNotes(note);
+                break;
+            case "medication":
+                item.setMedName(medName);
+                item.setDosage(dosage);
+                break;
+        }
+    }
+
+    private void handleMediaUploads(Item item, String userId) {
+        if (imageUri != null && pdfUri != null) {
+            addBoth(imageUri, pdfUri, item, userId);
+        } else if (imageUri != null) {
+            addMedia(imageUri, item, true, userId);
+        } else if (pdfUri != null) {
+            addMedia(pdfUri, item, false, userId);
+        } else {
+            // No new media, just save the item
+            itemsRef.child(item.getId()).setValue(item).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String message = isEditMode ? "Item updated" : "Item added";
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    clearFields();
+
+                    // Navigate back after successful save/update
+                    if (getActivity() != null) {
+                        getActivity().onBackPressed();
+                    }
+                } else {
+                    String message = isEditMode ? "Failed to update item" : "Failed to add item";
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 2 && resultCode == RESULT_OK && data != null){
+            imageUri = data.getData();
+            imageViewAddImageDisplay.setImageURI(imageUri); //this is what change the image in the app
+            imageViewAddImageDisplay.setVisibility(View.VISIBLE);
+        }
+
+        else if (requestCode == 3 && resultCode == RESULT_OK && data != null){
+    //            File selection
+            pdfUri = data.getData();
+
+            // Get file name to display
+            String fileName = getFileName(pdfUri);
+            textViewPdfNameDisplay.setText(fileName); // Show selected file name
+            textViewPdfNameDisplay.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void addMedia(Uri uri, Item item, boolean isImage, String userId){
+        final StorageReference fileRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(uri));
+        fileRef.putFile(uri).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                fileRef.getDownloadUrl().addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        String downloadUrl = task2.getResult().toString();
+
+                        if (isImage) {
+                            item.setImageUrl(downloadUrl);
+                        } else {
+                            item.setFileUrl(downloadUrl);
+                        }
+
+                        itemsRef.child(item.getId()).setValue(item).addOnCompleteListener(task3 -> {
+                            if (task3.isSuccessful()) {
+                                String mediaType = isImage ? "image" : "file";
+                                Toast.makeText(getContext(), "Item added with " + mediaType, Toast.LENGTH_SHORT).show();
+                                clearFields();
+
+                                // Navigate back after successful save/update
+                                if (getActivity() != null) {
+                                    getActivity().onBackPressed();
+                                }
+                            } else {
+                                Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Failed to add media link", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Toast.makeText(getContext(), "Failed to upload media", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addBoth(Uri imageUri, Uri pdfUri, Item item, String userId) {
+        // First upload image
+        final StorageReference imageRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(imageUri));
+        imageRef.putFile(imageUri).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                imageRef.getDownloadUrl().addOnCompleteListener(task2 -> {
+                    if (task2.isSuccessful()) {
+                        // Set image URL
+                        item.setImageUrl(task2.getResult().toString());
+                        // Now upload PDF
+                        final StorageReference pdfRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(pdfUri));
+                        pdfRef.putFile(pdfUri).addOnCompleteListener(task3 -> {
+                            if (task3.isSuccessful()) {
+                                pdfRef.getDownloadUrl().addOnCompleteListener(task4 -> {
+                                    if (task4.isSuccessful()) {
+                                        // Set PDF URL
+                                        item.setFileUrl(task4.getResult().toString());
+
+                                        // Save item with both URLs
+                                        itemsRef.child(item.getId()).setValue(item).addOnCompleteListener(task5 -> {
+                                            if (task5.isSuccessful()) {
+                                                Toast.makeText(getContext(), "Item added with image and PDF", Toast.LENGTH_SHORT).show();
+                                                clearFields();
+                                                if (getActivity() != null) {
+                                                    getActivity().onBackPressed();
+                                                }
+                                            } else {
+                                                Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else {
+                                        Toast.makeText(getContext(), "Failed to get PDF download URL", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(getContext(), "Failed to upload PDF", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getContext(), "Failed to get image download URL", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getFileExtension(Uri mUri){
+
+        ContentResolver cr = requireActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(mUri));
+
+    }
+
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = requireActivity().getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {  // Check if column exists
+                        result = cursor.getString(nameIndex);
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
     private void onCategoryChanged(String selectedCategory){
         switch (selectedCategory){
             case "document":
@@ -192,241 +579,40 @@ public class AddItemFragment extends Fragment {
                 break;
         }
     }
-    private void addItem() {
-        String title = editTextTitle.getText().toString().trim();
-        String description = editTextDescription.getText().toString().trim();
-        String date = editTextDate.getText().toString().trim();
 
-        String govId = editTextGovId.getText().toString().trim();
-        String courtOrder = editTextCourtOrders.getText().toString().trim();
+    private void clearFields() {
+        editTextTitle.setText("");
+        editTextDescription.setText("");
+        editTextDate.setText("");
+        editTextGovId.setText("");
+        editTextCourtOrders.setText("");
+        editTextName.setText("");
+        editTextRelationship.setText("");
+        editTextPhone.setText("");
+        editTextAddress.setText("");
+        editTextNote.setText("");
+        editTextMedName.setText("");
+        editTextDosage.setText("");
 
-        String name = editTextName.getText().toString().trim();
-        String relationship = editTextRelationship.getText().toString().trim();
-        String phone = editTextPhone.getText().toString().trim();
-
-        String address = editTextAddress.getText().toString().trim();
-        String note = editTextNote.getText().toString().trim();
-
-        String medName = editTextMedName.getText().toString().trim();
-        String dosage = editTextDosage.getText().toString().trim();
-
-        String category = spinnerCategory.getSelectedItem().toString().toLowerCase();
-
-        if (title.isEmpty() || description.isEmpty()) {
-            Toast.makeText(getContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
-            // User not authenticated, redirect to login
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-            getActivity().finish();
-            return;
-        }
-
-        String userId = currentUser.getUid();
-        itemsRef = db.getReference("users/" + userId + "/categories/" + category);
-        String id = itemsRef.push().getKey();
-        Item item = new Item(id, title, description, date, category);
-
-        switch (category){
-            case "document":
-                item.setGovId(govId);
-                item.setCourtOrder(courtOrder);
-                break;
-            case "emergency contact":
-                item.setName(name);
-                item.setRelationship(relationship);
-                item.setPhone(phone);
-                break;
-            case "safe location":
-                item.setAddress(address);
-                item.setNotes(note);
-                break;
-            case "medication":
-                item.setMedName(medName);
-                item.setDosage(dosage);
-                break;
-        }
-
-        if (imageUri != null && pdfUri != null){
-            addBoth(imageUri, pdfUri, item, userId);
-        } else if (imageUri != null) {
-            addMedia(imageUri, item, true, userId);
-        } else if (pdfUri != null) {
-            addMedia(pdfUri, item, false, userId);
-        } else {
-            itemsRef.child(id).setValue(item).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getContext(), "Item added", Toast.LENGTH_SHORT).show();
-                    setTextNull();
-                } else {
-                    Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 2 && resultCode == RESULT_OK && data != null){
-            imageUri = data.getData();
-            imageViewAddImageDisplay.setImageURI(imageUri); //this is what change the image in the app
-            imageViewAddImageDisplay.setVisibility(View.VISIBLE);
-        }
-
-        else if (requestCode == 3 && resultCode == RESULT_OK && data != null){
-//            File selection
-            pdfUri = data.getData();
-
-            // Get file name to display
-            String fileName = getFileName(pdfUri);
-            textViewPdfNameDisplay.setText(fileName); // Show selected file name
-            textViewPdfNameDisplay.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void addMedia(Uri uri, Item item, boolean isImage, String userId){
-        final StorageReference fileRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(uri));
-        fileRef.putFile(uri).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                fileRef.getDownloadUrl().addOnCompleteListener(task2 -> {
-                    if (task2.isSuccessful()) {
-                        String downloadUrl = task2.getResult().toString();
-
-                        if (isImage) {
-                            item.setImageUrl(downloadUrl);
-                        } else {
-                            item.setFileUrl(downloadUrl);
-                            item.setPdfName(getFileName(pdfUri));
-                        }
-
-                        itemsRef.child(item.getId()).setValue(item).addOnCompleteListener(task3 -> {
-                            if (task3.isSuccessful()) {
-                                String mediaType = isImage ? "image" : "file";
-                                Toast.makeText(getContext(), "Item added with " + mediaType, Toast.LENGTH_SHORT).show();
-                                setTextNull();
-                            } else {
-                                Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    else {
-                        Toast.makeText(getContext(), "Failed to add media link", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                Toast.makeText(getContext(), "Failed to upload media", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void addBoth(Uri imageUri, Uri pdfUri, Item item, String userId) {
-        // First upload image
-        final StorageReference imageRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(imageUri));
-        imageRef.putFile(imageUri).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                imageRef.getDownloadUrl().addOnCompleteListener(task2 -> {
-                    if (task2.isSuccessful()) {
-                        // Set image URL
-                        item.setImageUrl(task2.getResult().toString());
-
-                        // Now upload PDF
-                        final StorageReference pdfRef = reference.child(userId + "/" + System.currentTimeMillis() + "." + getFileExtension(pdfUri));
-                        pdfRef.putFile(pdfUri).addOnCompleteListener(task3 -> {
-                            if (task3.isSuccessful()) {
-                                pdfRef.getDownloadUrl().addOnCompleteListener(task4 -> {
-                                    if (task4.isSuccessful()) {
-                                        // Set PDF URL
-                                        item.setFileUrl(task4.getResult().toString());
-                                        item.setPdfName(getFileName(pdfUri));
-
-                                        // Save item with both URLs
-                                        itemsRef.child(item.getId()).setValue(item).addOnCompleteListener(task5 -> {
-                                            if (task5.isSuccessful()) {
-                                                Toast.makeText(getContext(), "Item added with image and PDF", Toast.LENGTH_SHORT).show();
-                                                setTextNull();
-                                            } else {
-                                                Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    } else {
-                                        Toast.makeText(getContext(), "Failed to get PDF download URL", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            } else {
-                                Toast.makeText(getContext(), "Failed to upload PDF", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getContext(), "Failed to get image download URL", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private String getFileExtension(Uri mUri){
-
-        ContentResolver cr = requireActivity().getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cr.getType(mUri));
-
-    }
-
-    private String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = requireActivity().getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                    if (nameIndex != -1) {  // Check if column exists
-                        result = cursor.getString(nameIndex);
-                    }
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
-
-    private void setTextNull(){
-        editTextTitle.setText(null);
-        editTextDate.setText(null);
-        editTextDescription.setText(null);
-
-        editTextGovId.setText(null);
-        editTextCourtOrders.setText(null);
-
-        editTextName.setText(null);
-        editTextRelationship.setText(null);
-        editTextPhone.setText(null);
-
-        editTextAddress.setText(null);
-        editTextNote.setText(null);
-
-        editTextMedName.setText(null);
-        editTextDosage.setText(null);
+        imageViewAddImageDisplay.setVisibility(View.GONE);
+        textViewPdfNameDisplay.setVisibility(View.GONE);
 
         imageUri = null;
-        imageViewAddImageDisplay.setVisibility(View.GONE);
-
         pdfUri = null;
-        textViewPdfNameDisplay.setVisibility(View.GONE);
     }
+
+    private void displaySavedImage(Item item) {
+        String imageUrl = item.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache for better performance
+                    .into(imageViewAddImageDisplay);
+
+            imageViewAddImageDisplay.setVisibility(View.VISIBLE);
+        } else {
+            imageViewAddImageDisplay.setVisibility(View.GONE);
+        }
+    }
+
 }

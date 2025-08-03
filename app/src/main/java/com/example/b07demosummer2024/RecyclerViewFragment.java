@@ -57,6 +57,14 @@ public class RecyclerViewFragment extends Fragment {
         itemAdapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(itemAdapter);
 
+//         Set the edit click listener
+        itemAdapter.setOnItemEditClickListener(new ItemAdapter.OnItemEditClickListener() {
+            @Override
+            public void onEditClick(Item item, int position) {
+                navigateToEditFragment(item);
+            }
+        });
+
         db = FirebaseDatabase.getInstance("https://b07finalproject-23dae-default-rtdb.firebaseio.com/");
 
         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -110,5 +118,31 @@ public class RecyclerViewFragment extends Fragment {
             }
         };
         itemsRef.addValueEventListener(currentListener);
+    }
+    // Simpler approach - replace your navigateToEditFragment method with this:
+    private void navigateToEditFragment(Item item) {
+        if (item == null) {
+            Log.e("Navigation", "Cannot navigate: item is null");
+            Toast.makeText(getContext(), "Error: Invalid item", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (getParentFragmentManager() == null) {
+            Log.e("Navigation", "Cannot navigate: FragmentManager is null");
+            return;
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item_to_edit", item);
+        bundle.putString("category", item.getCategory());
+
+        EditItemFragment editFragment = new EditItemFragment();
+        editFragment.setArguments(bundle);
+
+        // Use the same pattern as your working code snippet
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, editFragment) // Make sure this ID matches your actual container
+                .addToBackStack(null)
+                .commit();
     }
 }

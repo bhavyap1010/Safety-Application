@@ -1,5 +1,9 @@
 package com.example.b07demosummer2024;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,16 +15,25 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     private List<Item> itemList;
     private String currentCategory;
+    private OnItemEditClickListener editClickListener; // Add this interface
+    public interface OnItemEditClickListener {
+        void onEditClick(Item item, int position);
+    }
     public ItemAdapter(List<Item> itemList) {
-
         this.itemList = itemList;
         this.currentCategory = "";
+    }
+
+    public void setOnItemEditClickListener(OnItemEditClickListener listener) {
+        this.editClickListener = listener;
     }
 
     // Method to update the category
@@ -39,7 +52,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Item item = itemList.get(position);
         holder.textViewTitle.setText(item.getTitle());
-        holder.textViewDescription.setText("Description " + item.getDescription());
+        holder.textViewDescription.setText("Description: " + item.getDescription());
         holder.textViewDate.setText("Date: " + item.getDate());
         holder.textViewGovId.setText("ID: " + item.getGovId());
         holder.textViewCourtOrders.setText("CourtOrders: " + item.getCourtOrder());
@@ -50,6 +63,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.textViewNote.setText("Note: " + item.getNotes());
         holder.textViewMedName.setText("Medication Name: " + item.getMedName());
         holder.textViewDosage.setText("Dosage: " + item.getDosage());
+        // URL fields - make them clickable
+        if (item.getImageUrl() != null && !item.getImageUrl().isEmpty() && holder.textViewImageUrl != null) {
+            setupUrlTextView(holder.textViewImageUrl, item.getImageUrl(), "View Image");
+        } else if (holder.textViewImageUrl != null) {
+            holder.textViewImageUrl.setVisibility(View.GONE);
+        }
+
+        if (item.getFileUrl() != null && !item.getFileUrl().isEmpty() && holder.textViewFileUrl != null) {
+            setupUrlTextView(holder.textViewFileUrl, item.getFileUrl(), "View Document");
+        } else if (holder.textViewFileUrl != null) {
+            holder.textViewFileUrl.setVisibility(View.GONE);
+        }
 
         holder.itemOptionsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,18 +85,22 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
+
                         int itemId = menuItem.getItemId();
-                        //Bring to edit page
+                        int adapterPosition = holder.getAdapterPosition(); // Fixed: Use holder.getAdapterPosition()
+                        //Bring to edit pag
                         // You have access to 'item' (the data for this row)
                         // and 'position' (the adapter position of this row)
                         if (itemId == R.id.menu_edit) {
                             Toast.makeText(v.getContext(), "Edit: " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                            // TODO: Implement edit functionality for 'item'
+                            if (editClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                                editClickListener.onEditClick(item, adapterPosition);
+                            }
+
                             return true;
                         } else if (itemId == R.id.menu_delete) {
                             Toast.makeText(v.getContext(), "Delete: " + item.getTitle(), Toast.LENGTH_SHORT).show();
                             // TODO: Implement delete functionality
-                            //Just bring to the delete page
                             // Example:
                             // if (position != RecyclerView.NO_POSITION) {
                             //     itemList.remove(position);
@@ -161,8 +190,33 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return itemList.size();
     }
 
+    // Helper method in your ItemAdapter
+    private void setupUrlTextView(TextView textView, String url, String displayText) {
+        textView.setText(displayText);
+        textView.setTextColor(Color.BLUE);
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textView.setVisibility(View.VISIBLE);
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    v.getContext().startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(v.getContext(), "Unable to open link", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewTitle, textViewDescription, textViewDate, textViewGovId, textViewCourtOrders, textViewName, textViewRelationship, textViewPhone, textViewAddress, textViewNote, textViewMedName, textViewDosage;
+        TextView textViewTitle, textViewDescription, textViewDate,
+                textViewGovId, textViewCourtOrders,
+                textViewName, textViewRelationship, textViewPhone,
+                textViewAddress, textViewNote,
+                textViewMedName, textViewDosage,
+                textViewImageUrl, textViewFileUrl;
         ImageView itemOptionsImageView;
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -177,6 +231,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             textViewNote = itemView.findViewById(R.id.textViewNote);
             textViewMedName = itemView.findViewById(R.id.textViewMedName);
             textViewDosage = itemView.findViewById(R.id.textViewDosage);
+            textViewImageUrl = itemView.findViewById(R.id.textViewImageUrl);
+            textViewFileUrl = itemView.findViewById(R.id.textViewFileUrl);
             textViewDescription = itemView.findViewById(R.id.textViewDescription);
             itemOptionsImageView = itemView.findViewById(R.id.imageView);
         }

@@ -44,7 +44,12 @@ dependencies {
     implementation(libs.google.firebase.auth)
     implementation(libs.firebase.storage)
 
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 }
