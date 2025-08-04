@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -142,6 +143,10 @@ if(task.getResult().getValue(Integer.class) !=null) {
             startActivity(intent);
             finish();
             return true;
+        } else if (item.getItemId() == R.id.action_home) {
+            // Handle the "Home" action here
+            loadFragment(new HomeFragment());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,17 +159,24 @@ if(task.getResult().getValue(Integer.class) !=null) {
         finish();
     }
 
-//    private void loadFragment(Fragment fragment) {
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.fragment_container, fragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-//    }
+    private void loadFragment(Fragment fragment) {
+        // Hide the main plan view when loading a fragment
+        findViewById(R.id.main).setVisibility(View.GONE);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
+            // If we're back to the main view, show it again
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                findViewById(R.id.main).setVisibility(View.VISIBLE);
+            }
         } else {
             super.onBackPressed();
         }
