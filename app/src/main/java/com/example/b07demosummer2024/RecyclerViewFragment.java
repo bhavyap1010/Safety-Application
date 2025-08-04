@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -112,7 +111,7 @@ public class RecyclerViewFragment extends Fragment {
         String userId = currentUser.getUid();
 
         if (itemAdapter != null) {
-            itemAdapter.setCurrentCategory(category); // Ensure category is set before data binding with new items
+            itemAdapter.setCurrentCategory(category);
         }
 
         itemsRef = db.getReference("users/" + userId + "/categories/" + category);
@@ -156,7 +155,6 @@ public class RecyclerViewFragment extends Fragment {
         EditItemFragment editFragment = new EditItemFragment();
         editFragment.setArguments(bundle);
 
-        // Use the same pattern as your working code snippet
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, editFragment) // Make sure this ID matches your actual container
                 .addToBackStack(null)

@@ -142,7 +142,7 @@
         app:layout_constraintTop_toTopOf="@+id/textViewTitle"
         app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"
         app:layout_constraintEnd_toEndOf="parent" />
-    
+
     <View
         android:id="@+id/separator"
         android:layout_width="0dp"
