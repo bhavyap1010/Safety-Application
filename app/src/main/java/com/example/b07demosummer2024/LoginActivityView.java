@@ -1,5 +1,6 @@
 package com.example.b07demosummer2024;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -120,6 +121,20 @@ public class LoginActivityView extends AppCompatActivity implements LoginActivit
     }
 
     @Override
+    public void startPinLoginActivity() {
+        Intent intent = new Intent(LoginActivityView.this, PinLoginActivity.class);
+        startActivity(intent);
+        finish(); // Close login activity so user can't go back to it
+    }
+
+    @Override
+    public void startPinSetupActivity() {
+        Intent intent = new Intent(LoginActivityView.this, PinSetupActivity.class); // Or your actual PIN setup activity name
+        startActivity(intent);
+        finish(); // Close login activity
+    }
+
+    @Override
     public String getEmailText() {
         return editTextEmail.getText().toString().trim();
     }
@@ -137,5 +152,10 @@ public class LoginActivityView extends AppCompatActivity implements LoginActivit
     @Override
     public void showErrorMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public Context getContext() {
+        return this; // Or getApplicationContext() if appropriate
     }
 }

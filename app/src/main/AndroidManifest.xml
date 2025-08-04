@@ -32,6 +32,9 @@
             android:exported="false">
         </activity>
 
+        <activity android:name=".PinSetupActivity" />
+        <activity android:name=".PinLoginActivity" />
+
     </application>
 
 </manifest>

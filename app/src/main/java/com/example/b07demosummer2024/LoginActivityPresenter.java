@@ -1,5 +1,6 @@
 package com.example.b07demosummer2024;
 
+import android.content.Context;
 import android.util.Log;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -10,24 +11,40 @@ public class LoginActivityPresenter {
     public interface LoginView {
         void showToast(String message);
         void startMainActivity();
+        void startPinLoginActivity();
+        void startPinSetupActivity();
         String getEmailText();
         String getPasswordText();
         void showSuccessMessage(String message);
         void showErrorMessage(String message);
+
+        Context getContext();
     }
 
+    private PinManager pinManager;
     private LoginView view;
     private LoginActivityModel model;
 
     public LoginActivityPresenter(LoginView view) {
         this.view = view;
         this.model = new LoginActivityModel();
+        this.pinManager = new PinManager();
     }
 
     public void checkIfUserLoggedIn() {
         FirebaseUser currentUser = model.getCurrentUser();
         if (currentUser != null) {
-            view.startMainActivity();
+
+            if (pinManager.isPinEnabled(view.getContext(), model.getCurrentUser().getUid())) {
+                // PIN is set up, go to PIN login screen
+                view.startPinLoginActivity();
+            } else {
+                // PIN not set up, but user is logged in (e.g., from a previous session before PIN feature)
+                // Decide the flow: go to main activity or prompt for PIN setup.
+                // For now, let's assume if Firebase user exists and no PIN, go to main.
+                // Or, you could force PIN setup here as well.
+                view.startMainActivity();
+            }
         }
     }
 
@@ -56,19 +73,40 @@ public class LoginActivityPresenter {
         String email = view.getEmailText();
         String password = view.getPasswordText();
 
+        // Basic validation in Presenter (optional, can also be in View or Model)
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            view.showErrorMessage("Please enter a valid email address.");
+            return;
+        }
+        if (password.isEmpty() || password.length() < 6) { // Example: Enforce minimum password length
+            view.showErrorMessage("Password must be at least 6 characters long.");
+            return;
+        }
+
         model.registerWithEmail(email, password, new LoginActivityModel.AuthCallback() {
             @Override
             public void onSuccess() {
-                Log.d(TAG, "createUserWithEmail:success");
-                view.showSuccessMessage("Registration successful");
-                view.startMainActivity();
+                // Firebase automatically signs in the user upon successful registration.
+                // The getCurrentUser() in the model will now return the new user.
+                Log.d(TAG, "createUserWithEmail:success - User registered and signed in.");
+
+                // Now, guide the new user to set up a PIN
+                view.showSuccessMessage("Registration successful! Please set up your PIN.");
+                view.startPinSetupActivity(); // Navigate to PIN setup screen
             }
 
             @Override
             public void onFailure(String errorMessage) {
                 Log.w(TAG, "createUserWithEmail:failure");
                 Log.e(TAG, "Full error: " + errorMessage);
-                view.showErrorMessage(errorMessage);
+                // More user-friendly error messages based on common Firebase errors:
+                if (errorMessage.contains("ERROR_EMAIL_ALREADY_IN_USE")) {
+                    view.showErrorMessage("This email address is already in use. Please try logging in or use a different email.");
+                } else if (errorMessage.contains("ERROR_WEAK_PASSWORD")) {
+                    view.showErrorMessage("The password is too weak. Please choose a stronger password.");
+                } else {
+                    view.showErrorMessage("Registration failed: " + errorMessage);
+                }
             }
         });
     }
