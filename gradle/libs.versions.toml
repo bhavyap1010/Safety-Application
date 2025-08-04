@@ -1,5 +1,6 @@
 [versions]
 agp = "8.4.1"
+firebaseBom = "33.16.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -13,8 +14,12 @@ firebaseAuth = "22.3.1"
 playServicesAuth = "20.7.0"
 securityCrypto = "1.0.0"
 securityCryptoVersion = "1.0.0"
+firebaseAuthVersion = "24.0.0"
+firebaseStorage = "22.0.0"
 
 [libraries]
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -25,8 +30,12 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+
 security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 security-crypto-v100 = { module = "androidx.security:security-crypto", version.ref = "securityCryptoVersion" }
+
+google-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuthVersion" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

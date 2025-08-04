@@ -29,9 +29,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.content.SharedPreferences;
+import androidx.appcompat.app.AlertDialog;
+import android.widget.Button;
+import android.content.Intent;
+import android.net.Uri;
+
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseDatabase db;
     private FirebaseAuth mAuth;
     RecyclerView recyclerView;
     PlanItemAdapter adapter;
@@ -40,10 +45,25 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    FirebaseDatabase db;
+    private static final String PREFS_NAME = "prefs";
+    private static final String KEY_PRIVACY_AGREED = "privacy_agreed";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    //start of new
+        Button exitBtn = findViewById(R.id.btn_exit);
+        exitBtn.setOnClickListener(v -> {
+            Intent browser = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.google.com"))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(browser);
+            finishAndRemoveTask();
+        });
+        //End of new
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -56,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+
 
 //         if (savedInstanceState == null) {
 //            loadFragment(new HomeFragment());
@@ -75,7 +96,6 @@ if(task.getResult().getValue(Integer.class) !=null) {
                             .add(R.id.questionaire_fragment, new QuestionnaireFragment())
                             .commit();
                 }
-
             }
         });
 
@@ -150,6 +170,7 @@ if(task.getResult().getValue(Integer.class) !=null) {
         }
     }
 
+
     public void nowPlan() {
 
         Fragment q  = getSupportFragmentManager().findFragmentById(R.id.questionaire_fragment);
@@ -214,6 +235,5 @@ if(task.getResult().getValue(Integer.class) !=null) {
         if (currentUser != null) {
             FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).child("done").setValue(1);
         }
-
     }
 }

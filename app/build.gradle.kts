@@ -32,6 +32,9 @@ android {
 
 dependencies {
 
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -40,6 +43,9 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
     implementation(libs.security.crypto.v100)
+    implementation(libs.google.firebase.auth)
+    implementation(libs.firebase.storage)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
