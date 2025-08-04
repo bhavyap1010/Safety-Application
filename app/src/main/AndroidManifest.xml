@@ -18,7 +18,7 @@
 
         <!-- Login activity (displays as first screen) -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginActivityView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

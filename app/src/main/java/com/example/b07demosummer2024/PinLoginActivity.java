@@ -76,7 +76,7 @@ public class PinLoginActivity extends AppCompatActivity {
         // This means they'll have to set up PIN again after email login if they wish.
         pinManager.clearPin(this, mAuth.getCurrentUser().getUid()); // This makes them go through PIN setup again after email login
 
-        Intent intent = new Intent(PinLoginActivity.this, LoginActivity.class);
+        Intent intent = new Intent(PinLoginActivity.this, LoginActivityView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

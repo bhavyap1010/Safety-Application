@@ -45,7 +45,7 @@ public class PinSetupActivity extends AppCompatActivity {
             // Navigate back to login or handle cancellation appropriately
             // For now, let's go back to LoginActivity
             // Consider if the user should be logged out if they cancel PIN setup
-            startActivity(new Intent(PinSetupActivity.this, LoginActivity.class));
+            startActivity(new Intent(PinSetupActivity.this, LoginActivityView.class));
             finish();
         });
     }

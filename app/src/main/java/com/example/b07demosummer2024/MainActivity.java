@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             // User not authenticated, redirect to login
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, LoginActivityView.class));
             finish();
             return;
         }
@@ -128,7 +128,7 @@ if(task.getResult().getValue(Integer.class) !=null) {
 
     private void logout() {
         mAuth.signOut();
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivityView.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
