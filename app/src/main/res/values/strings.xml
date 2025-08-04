@@ -10,6 +10,7 @@
     <string name="scroller">Scroller</string>
     <string name="spinner">Spinner</string>
     <string name="manage_items">Manage Items</string>
+    <string name="support_resources">Support Resources</string>
 
     <!-- Google sign in -->
     <string name="default_web_client_id">1030651688579-q04kt057ofuhkiv5dij48083e4loj327.apps.googleusercontent.com</string>
@@ -21,5 +22,13 @@
         <item>Medication</item>
     </string-array>
 
+    <string name="privacy_notice_title">Privacy Notice</string>
+    <string name="privacy_notice_msg">
+        By using this app I agree to have my personal information such as my name,
+        address, phone number, etc., stored in this application.
+        We will not use your information outside of this application.
+    </string>
+    <string name="agree">Agree</string>
+    <string name="disagree">Disagree</string>
 
 </resources>

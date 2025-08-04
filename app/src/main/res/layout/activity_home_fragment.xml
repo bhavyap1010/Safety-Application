@@ -47,4 +47,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <Button
+        android:id="@+id/buttonViewSupportPage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/support_resources"
+        app:layout_constraintTop_toBottomOf="@+id/buttonManageItems"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

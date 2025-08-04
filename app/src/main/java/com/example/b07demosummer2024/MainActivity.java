@@ -26,6 +26,7 @@ import android.net.Uri;
 
 public class MainActivity extends AppCompatActivity {
 
+//    private FirebaseDatabase db;
     private FirebaseAuth mAuth;
 
     FirebaseDatabase db;
@@ -38,18 +39,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     //start of new
-//        Button exitBtn = findViewById(R.id.btn_exit);
-//        exitBtn.setOnClickListener(v -> {
-//            Intent browser = new Intent(Intent.ACTION_VIEW,
-//                    Uri.parse("https://www.google.com"))
-//                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(browser);
-//            finishAndRemoveTask();
-//        });
+        Button exitBtn = findViewById(R.id.btn_exit);
+        exitBtn.setOnClickListener(v -> {
+            Intent browser = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.google.com"))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(browser);
+            finishAndRemoveTask();
+        });
         //End of new
 
         // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance(); //maybe just have this in AddItem
+        mAuth = FirebaseAuth.getInstance();
 
         // Check if user is authenticated
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -69,7 +70,11 @@ public class MainActivity extends AppCompatActivity {
                 .remove(KEY_PRIVACY_AGREED)
                 .apply();
         */
-//        showPrivacyDialogIfNeeded();
+        showPrivacyDialogIfNeeded();
+
+
+//        myRef.setValue("B07 Demo!");
+//        myRef.child("movies").setValue("B07 Demo!");
 
         if (savedInstanceState == null) {
             loadFragment(new HomeFragment());
@@ -115,24 +120,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void showPrivacyDialogIfNeeded() {
-//        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-//        boolean agreed = prefs.getBoolean(KEY_PRIVACY_AGREED, false);
-//
-//        if (!agreed) {
-//            new AlertDialog.Builder(this)
-//                    .setTitle(getString(R.string.privacy_notice_title))
-//                    .setMessage(getString(R.string.privacy_notice_msg))
-//                    .setCancelable(false)
-//                    .setPositiveButton(R.string.agree, (d, w) -> {
-//                        prefs.edit().putBoolean(KEY_PRIVACY_AGREED, true).apply();
-//                        // user continues into the app
-//                    })
-//                    .setNegativeButton(R.string.disagree, (d, w) -> {
-//                        // app exits
-//                        finishAffinity();
-//                    })
-//                    .show();
-//        }
-//    }
+    private void showPrivacyDialogIfNeeded() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean agreed = prefs.getBoolean(KEY_PRIVACY_AGREED, false);
+
+        if (!agreed) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.privacy_notice_title))
+                    .setMessage(getString(R.string.privacy_notice_msg))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.agree, (d, w) -> {
+                        prefs.edit().putBoolean(KEY_PRIVACY_AGREED, true).apply();
+                        // user continues into the app
+                    })
+                    .setNegativeButton(R.string.disagree, (d, w) -> {
+                        // app exits
+                        finishAffinity();
+                    })
+                    .show();
+        }
+    }
 }

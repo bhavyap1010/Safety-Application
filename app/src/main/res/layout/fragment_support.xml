@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/cityText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Support Resources for your city"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="12dp"/>
+
+        <TextView
+            android:id="@+id/victimTextViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Victim Services"
+            android:textSize="18sp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"/>
+
+
+        <TextView
+            android:id="@+id/victimTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/hotlineTextViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hotlines"
+            android:textSize="18sp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/hotlineTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/shelterTextViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Shelters"
+            android:textSize="18sp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/shelterTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/legalAidTextViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Legal Aid"
+            android:textSize="18sp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/legalAidTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/policeTextViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Police"
+            android:textSize="18sp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/policeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+    </LinearLayout>
+</ScrollView>
