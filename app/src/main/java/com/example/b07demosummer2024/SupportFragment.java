@@ -62,7 +62,7 @@ public class SupportFragment extends Fragment {
         // if the user is not logged in, then redirect to login
         if (currentUser == null) {
             Toast.makeText(getContext(), "User not logged in. Redirecting to login page", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            startActivity(new Intent(getActivity(), LoginActivityView.class));
             requireActivity().finish();
             return view;
         }
