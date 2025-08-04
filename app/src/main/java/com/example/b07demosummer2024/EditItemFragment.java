@@ -32,7 +32,6 @@ import com.google.firebase.storage.StorageReference;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-
 public class EditItemFragment extends Fragment {
     private EditText editTextTitle, editTextDate, editTextDescription;
     private EditText editTextGovId, editTextCourtOrders;
