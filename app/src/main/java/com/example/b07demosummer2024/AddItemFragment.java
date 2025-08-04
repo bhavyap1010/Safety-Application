@@ -221,7 +221,7 @@ public class AddItemFragment extends Fragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             // User not authenticated, redirect to login
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            startActivity(new Intent(getActivity(), LoginActivityView.class));
             getActivity().finish();
             return;
         }

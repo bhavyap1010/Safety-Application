@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/questions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingTop="50dp"
+    android:paddingRight="15dp">
+
+    <TextView
+        android:id="@+id/qNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/qText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The Question is blah blah???"
+        android:textSize="25sp"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textStyle="bold" />
+
+
+
+    <EditText
+        android:id="@+id/in"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:hint="Enter Answer"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/SubmitB"
+        android:layout_width="150dp"
+        android:layout_weight="1"
+        android:layout_height="70dp"
+        android:text="Next"
+        android:textSize="20sp"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:textColor="@android:color/white"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/BackB"
+        android:layout_width="150dp"
+        android:layout_weight="1"
+        android:layout_height="70dp"
+        android:text="Back"
+        android:textSize="20sp"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:textColor="@android:color/white"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:id="@+id/ButtonStorage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingTop="100dp"
+        android:paddingRight="15dp"/>
+
+
+
+
+    </LinearLayout>
+
+

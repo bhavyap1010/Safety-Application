@@ -10,8 +10,9 @@
     <string name="scroller">Scroller</string>
     <string name="spinner">Spinner</string>
     <string name="manage_items">Manage Items</string>
+    <string name="next">Next</string>
     <string name="support_resources">Support Resources</string>
-
+  
     <!-- Google sign in -->
     <string name="default_web_client_id">1030651688579-q04kt057ofuhkiv5dij48083e4loj327.apps.googleusercontent.com</string>
 
