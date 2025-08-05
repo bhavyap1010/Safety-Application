@@ -26,27 +26,41 @@ public class HomeFragment extends Fragment {
         buttonRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new RecyclerViewFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new RecyclerViewFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonScroller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new ScrollerFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new ScrollerFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new SpinnerFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new SpinnerFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonManageItems.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { loadFragment(new ManageItemsFragment());}
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new ManageItemsFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonManageReminders.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +70,13 @@ public class HomeFragment extends Fragment {
 
         buttonViewSupportPage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { loadFragment(new SupportFragment());}
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new SupportFragment())
+                        .commit();
+
+                ;}
+
         });
 
         return view;

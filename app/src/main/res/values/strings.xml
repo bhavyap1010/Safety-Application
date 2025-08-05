@@ -36,7 +36,25 @@
         address, phone number, etc., stored in this application.
         We will not use your information outside of this application.
     </string>
-    <string name="agree">Agree</string>
-    <string name="disagree">Disagree</string>
+    <string name="disclaimer_body">
+        This app is not a substitute for emergency services.
+        Do not rely on it during a crisis.
+        Although it helps you assess, plan and manage your safety,
+        any plan generated is personal and cannot guarantee prevention of harm.
+        By using this app you acknowledge these limitations.
+    </string>
+    <string name="privacy_body">
+        By using this app you agree that we may store personal information such as your name,
+        address and phone number. We will never use this information outside of this application.
+    </string>
+    <string name="i_understand">I understand</string>
 
+    <string-array name="cities_array">
+        <item>Toronto</item>
+        <item>Ottawa</item>
+        <item>Calgary</item>
+        <item>Vancouver</item>
+        <item>Montreal</item>
+
+    </string-array>
 </resources>
