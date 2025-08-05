@@ -24,7 +24,7 @@ public class ManageItemsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.questionaire_fragment, new AddItemFragment())
+                        .replace(R.id.fragment_container, new AddItemFragment())
                         .addToBackStack(null)
                         .commit();
 
@@ -40,7 +40,7 @@ public class ManageItemsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.questionaire_fragment, new DeleteItemFragment())
+                        .replace(R.id.fragment_container, new DeleteItemFragment())
                         .addToBackStack(null)
                         .commit();
 

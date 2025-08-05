@@ -26,7 +26,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.questionaire_fragment, new RecyclerViewFragment())
+                        .replace(R.id.fragment_container, new RecyclerViewFragment())
                         .commit();
 
                 ;}
@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.questionaire_fragment, new ScrollerFragment())
+                        .replace(R.id.fragment_container, new ScrollerFragment())
                         .commit();
 
                 ;}
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.questionaire_fragment, new SpinnerFragment())
+                        .replace(R.id.fragment_container, new SpinnerFragment())
                         .commit();
 
                 ;}
@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.questionaire_fragment, new ManageItemsFragment())
+                        .replace(R.id.fragment_container, new ManageItemsFragment())
                         .commit();
 
                 ;}
@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.questionaire_fragment, new SupportFragment())
+                        .replace(R.id.fragment_container, new SupportFragment())
                         .commit();
 
                 ;}

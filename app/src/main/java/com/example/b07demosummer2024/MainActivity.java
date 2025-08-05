@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     FirebaseDatabase db;
+    private static final String PREFS_NAME = "prefs";
+    private static final String KEY_PRIVACY_AGREED = "privacy_agreed";
 
 
     @Override
@@ -76,9 +78,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (getIntent().getBooleanExtra("NEW_ACCOUNT_CREATED", false)) {
-            showDisclaimer();
-        }
 
 //         if (savedInstanceState == null) {
 //            loadFragment(new HomeFragment());
@@ -95,7 +94,7 @@ if(task.getResult().getValue(Integer.class) !=null) {
                 }
                 } else {
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.questionaire_fragment, new QuestionnaireFragment())
+                            .add(R.id.fragment_container, new QuestionnaireFragment())
                             .commit();
                 }
             }
@@ -144,8 +143,10 @@ if(task.getResult().getValue(Integer.class) !=null) {
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_home) {
+            findViewById(R.id.main).setVisibility(View.GONE);
+
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.questionaire_fragment, new HomeFragment())
+                    .replace(R.id.fragment_container, new HomeFragment())
                     .commit();
 
             return true;
@@ -183,23 +184,14 @@ if(task.getResult().getValue(Integer.class) !=null) {
             super.onBackPressed();
         }
     }
-    public void showDisclaimer() {
-        View noticeView = getLayoutInflater()
-                .inflate(R.layout.disclaimers, null, false);
 
-        new AlertDialog.Builder(this)
-                .setView(noticeView)
-                .setCancelable(false)
-                .setPositiveButton(R.string.i_understand, (d, w) -> {
-                })
-                .show();
-    }
+
     public void nowPlan() {
 
-        Fragment q  = getSupportFragmentManager().findFragmentById(R.id.questionaire_fragment);
+        Fragment q  = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(q!=null) {
             getSupportFragmentManager().beginTransaction()
-                    .remove(q)
+                    .replace(R.id.fragment_container, new Fragment())
                     .commit();
         }
 

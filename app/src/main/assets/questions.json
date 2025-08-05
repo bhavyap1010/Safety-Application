@@ -113,7 +113,7 @@
 			{
 				"Question": "Have you identified a safe place to stay?",
 				"id": "pl_04",
-				"fid": "f_01",
+				"fid": "f_02",
 				"Type": "Select One + free form",
 				"Choices": ["Yes", "No"],
 				"follow": "enter a temporary shelter:"
