@@ -85,16 +85,14 @@ public class PinSetupActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-    /* If this screen was reached right after registration, make sure the
-       disclaimer still shows.  Otherwise fall back to normal behaviour. */
         if (isNewAccount) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("NEW_ACCOUNT_CREATED", true);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            finish();              // remove PinSetupActivity from the stack
+            finish();
         } else {
-            super.onBackPressed(); // existing user → behave normally
+            super.onBackPressed();
         }
     }
 }
