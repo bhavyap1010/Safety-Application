@@ -1,8 +1,12 @@
 package com.example.b07demosummer2024;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class LoginActivityPresenter {
 
@@ -57,7 +61,17 @@ public class LoginActivityPresenter {
             public void onSuccess() {
                 Log.d(TAG, "signInWithEmail:success");
                 view.showSuccessMessage("Login successful");
-                view.startMainActivity();
+
+                if (pinManager.isPinEnabled(view.getContext(), model.getCurrentUser().getUid())) {
+                    // PIN is set up, go to PIN login screen
+                    view.startMainActivity();
+                } else {
+                    // PIN not set up, but user is logged in (e.g., from a previous session before PIN feature)
+                    // Decide the flow: go to main activity or prompt for PIN setup.
+                    // For now, let's assume if Firebase user exists and no PIN, go to main.
+                    // Or, you could force PIN setup here as well
+                    view.startPinSetupActivity();
+                }
             }
 
             @Override

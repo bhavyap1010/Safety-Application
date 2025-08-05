@@ -66,18 +66,12 @@ public class PinLoginActivity extends AppCompatActivity {
     }
 
     private void switchToEmailLogin() {
-        // Clear any stored PIN preference if you want to force email login next time
-        // or just for this session.
-        // For now, just sign out Firebase user to ensure LoginActivity shows email fields.
         if (mAuth.getCurrentUser() != null) {
-            mAuth.signOut(); // Sign out to ensure LoginActivity doesn't auto-redirect via Firebase
+            pinManager.clearPin(this, mAuth.getCurrentUser().getUid());
+            mAuth.signOut();
         }
-        // Also clear the PIN enabled flag so onStart() in LoginActivity doesn't redirect here.
-        // This means they'll have to set up PIN again after email login if they wish.
-        pinManager.clearPin(this, mAuth.getCurrentUser().getUid()); // This makes them go through PIN setup again after email login
 
         Intent intent = new Intent(PinLoginActivity.this, LoginActivityView.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
