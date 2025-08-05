@@ -10,9 +10,9 @@ public class LoginActivityPresenter {
 
     public interface LoginView {
         void showToast(String message);
-        void startMainActivity();
+        void startMainActivity(boolean isNewAccount);
         void startPinLoginActivity();
-        void startPinSetupActivity();
+        void startPinSetupActivity(boolean isNewAccount);
         String getEmailText();
         String getPasswordText();
         void showSuccessMessage(String message);
@@ -43,7 +43,7 @@ public class LoginActivityPresenter {
                 // Decide the flow: go to main activity or prompt for PIN setup.
                 // For now, let's assume if Firebase user exists and no PIN, go to main.
                 // Or, you could force PIN setup here as well.
-                view.startMainActivity();
+                view.startMainActivity(false);
             }
         }
     }
@@ -54,10 +54,10 @@ public class LoginActivityPresenter {
 
         model.loginWithEmail(email, password, new LoginActivityModel.AuthCallback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(boolean isNew) {
                 Log.d(TAG, "signInWithEmail:success");
                 view.showSuccessMessage("Login successful");
-                view.startMainActivity();
+                view.startMainActivity(isNew);
             }
 
             @Override
@@ -85,14 +85,14 @@ public class LoginActivityPresenter {
 
         model.registerWithEmail(email, password, new LoginActivityModel.AuthCallback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(boolean isNewAccount) {
                 // Firebase automatically signs in the user upon successful registration.
                 // The getCurrentUser() in the model will now return the new user.
                 Log.d(TAG, "createUserWithEmail:success - User registered and signed in.");
 
                 // Now, guide the new user to set up a PIN
                 view.showSuccessMessage("Registration successful! Please set up your PIN.");
-                view.startPinSetupActivity(); // Navigate to PIN setup screen
+                view.startPinSetupActivity(true); // Navigate to PIN setup screen
             }
 
             @Override
@@ -116,10 +116,10 @@ public class LoginActivityPresenter {
 
         model.firebaseAuthWithGoogle(idToken, new LoginActivityModel.AuthCallback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(boolean isNew) {
                 Log.d(TAG, "signInWithCredential:success");
                 view.showSuccessMessage("Google sign in successful");
-                view.startMainActivity();
+                view.startMainActivity(isNew);
             }
 
             @Override
@@ -135,7 +135,7 @@ public class LoginActivityPresenter {
 
         model.resetPassword(email, new LoginActivityModel.AuthCallback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(boolean ignored) {
                 view.showSuccessMessage("Password reset email sent");
             }
 

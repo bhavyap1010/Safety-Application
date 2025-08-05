@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class PinSetupActivity extends AppCompatActivity {
 
+    private boolean isNewAccount;
     private EditText editTextPin, editTextConfirmPin;
     private Button buttonSubmitPin, buttonCancelPinSetup;
 
@@ -28,6 +29,8 @@ public class PinSetupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin_setup);
+
+        isNewAccount = getIntent().getBooleanExtra("NEW_ACCOUNT_CREATED", false);
 
         pinManager = new PinManager();
 
@@ -45,7 +48,9 @@ public class PinSetupActivity extends AppCompatActivity {
             // Navigate back to login or handle cancellation appropriately
             // For now, let's go back to LoginActivity
             // Consider if the user should be logged out if they cancel PIN setup
-            startActivity(new Intent(PinSetupActivity.this, LoginActivityView.class));
+            Intent intent = new Intent(PinSetupActivity.this, MainActivity.class);
+            intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);
+            startActivity(intent);
             finish();
         });
     }
@@ -67,13 +72,29 @@ public class PinSetupActivity extends AppCompatActivity {
         // PIN is valid, save it securely
         if (pinManager.storePin(this, pin, userID)) { // Use PinManager
             Toast.makeText(this, "PIN setup successful!", Toast.LENGTH_SHORT).show();
-
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);
             // Navigate back to LoginActivity
-            startActivity(new Intent(PinSetupActivity.this, MainActivity.class));
+            startActivity(intent);
             finish();
 
         } else {
             Toast.makeText(this, "Failed to save PIN. Please try again.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+    /* If this screen was reached right after registration, make sure the
+       disclaimer still shows.  Otherwise fall back to normal behaviour. */
+        if (isNewAccount) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("NEW_ACCOUNT_CREATED", true);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();              // remove PinSetupActivity from the stack
+        } else {
+            super.onBackPressed(); // existing user → behave normally
         }
     }
 }

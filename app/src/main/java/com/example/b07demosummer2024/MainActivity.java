@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     FirebaseDatabase db;
-    private static final String PREFS_NAME = "prefs";
-    private static final String KEY_PRIVACY_AGREED = "privacy_agreed";
 
 
     @Override
@@ -78,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        if (getIntent().getBooleanExtra("NEW_ACCOUNT_CREATED", false)) {
+            showDisclaimer();
+        }
 
 //         if (savedInstanceState == null) {
 //            loadFragment(new HomeFragment());
@@ -182,8 +183,17 @@ if(task.getResult().getValue(Integer.class) !=null) {
             super.onBackPressed();
         }
     }
+    public void showDisclaimer() {
+        View noticeView = getLayoutInflater()
+                .inflate(R.layout.disclaimers, null, false);
 
-
+        new AlertDialog.Builder(this)
+                .setView(noticeView)
+                .setCancelable(false)
+                .setPositiveButton(R.string.i_understand, (d, w) -> {
+                })
+                .show();
+    }
     public void nowPlan() {
 
         Fragment q  = getSupportFragmentManager().findFragmentById(R.id.questionaire_fragment);
