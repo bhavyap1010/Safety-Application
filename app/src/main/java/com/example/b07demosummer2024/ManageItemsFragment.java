@@ -23,13 +23,31 @@ public class ManageItemsFragment extends Fragment {
         buttonAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new AddItemFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.questionaire_fragment, new AddItemFragment())
+                        .addToBackStack(null)
+                        .commit();
+
+                ;}
         });
 
-        buttonDeleteItem.setOnClickListener(v -> loadFragment(new DeleteItemFragment()));
+
+        //buttonDeleteItem.setOnClickListener(v -> loadFragment(new DeleteItemFragment()));
 
         buttonBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+
+        buttonDeleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.questionaire_fragment, new DeleteItemFragment())
+                        .addToBackStack(null)
+                        .commit();
+
+                ;}
+        });
+
+
 
         return view;
     }

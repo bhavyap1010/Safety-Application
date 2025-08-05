@@ -137,15 +137,16 @@ if(task.getResult().getValue(Integer.class) !=null) {
             logout();
             return true;
         } else if (item.getItemId() == R.id.action_change_pin) {
-            // Handle the "Change pin" action here
-            // For example, you might start a new Activity or show a Dialog:
+
              Intent intent = new Intent(this, PinSetupActivity.class);
             startActivity(intent);
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_home) {
-            // Handle the "Home" action here
-            loadFragment(new HomeFragment());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.questionaire_fragment, new HomeFragment())
+                    .commit();
+
             return true;
         }
         return super.onOptionsItemSelected(item);

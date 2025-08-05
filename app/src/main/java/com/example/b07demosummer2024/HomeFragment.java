@@ -25,32 +25,52 @@ public class HomeFragment extends Fragment {
         buttonRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new RecyclerViewFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.questionaire_fragment, new RecyclerViewFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonScroller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new ScrollerFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.questionaire_fragment, new ScrollerFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new SpinnerFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.questionaire_fragment, new SpinnerFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonManageItems.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { loadFragment(new ManageItemsFragment());}
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.questionaire_fragment, new ManageItemsFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonViewSupportPage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { loadFragment(new SupportFragment());}
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.questionaire_fragment, new SupportFragment())
+                        .commit();
+
+                ;}
+
         });
 
         return view;

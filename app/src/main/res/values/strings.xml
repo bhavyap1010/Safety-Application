@@ -32,4 +32,12 @@
     <string name="agree">Agree</string>
     <string name="disagree">Disagree</string>
 
+    <string-array name="cities_array">
+        <item>Toronto</item>
+        <item>Ottawa</item>
+        <item>Calgary</item>
+        <item>Vancouver</item>
+        <item>Montreal</item>
+
+    </string-array>
 </resources>
