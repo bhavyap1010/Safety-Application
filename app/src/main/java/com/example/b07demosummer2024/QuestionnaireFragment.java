@@ -712,6 +712,10 @@ public class QuestionnaireFragment extends Fragment {
                     input.setVisibility(View.VISIBLE);
                     next.setVisibility(View.VISIBLE);
                     back.setVisibility(View.VISIBLE);
+                    rootNode = FirebaseDatabase.getInstance();
+                    ref = rootNode.getReference("users");
+                    String response = current;
+                    ref.child(userNow).child("wu_01").setValue(response);
                     readJson();
 
 
