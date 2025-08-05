@@ -25,10 +25,10 @@ public class LoginActivityPresenter {
     private LoginView view;
     private LoginActivityModel model;
 
-    public LoginActivityPresenter(LoginView view) {
+    public LoginActivityPresenter(LoginView view, LoginActivityModel model, PinManager pinManager) {
         this.view = view;
-        this.model = new LoginActivityModel();
-        this.pinManager = new PinManager();
+        this.model = model;
+        this.pinManager = pinManager;
     }
 
     public void checkIfUserLoggedIn() {
@@ -73,12 +73,11 @@ public class LoginActivityPresenter {
         String email = view.getEmailText();
         String password = view.getPasswordText();
 
-        // Basic validation in Presenter (optional, can also be in View or Model)
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!isValidEmail(email)) {
             view.showErrorMessage("Please enter a valid email address.");
             return;
         }
-        if (password.isEmpty() || password.length() < 6) { // Example: Enforce minimum password length
+        if (password == null || password.isEmpty() || password.length() < 6) {
             view.showErrorMessage("Password must be at least 6 characters long.");
             return;
         }
@@ -144,5 +143,14 @@ public class LoginActivityPresenter {
                 view.showErrorMessage(errorMessage);
             }
         });
+    }
+
+    private boolean isValidEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+
+        String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        return email.matches(emailPattern);
     }
 }
