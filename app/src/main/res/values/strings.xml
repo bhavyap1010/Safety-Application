@@ -10,9 +10,10 @@
     <string name="scroller">Scroller</string>
     <string name="spinner">Spinner</string>
     <string name="manage_items">Manage Items</string>
+    <string name="manage_reminders">Manage Reminders</string>
     <string name="next">Next</string>
     <string name="support_resources">Support Resources</string>
-  
+
     <!-- Google sign in -->
     <string name="default_web_client_id">1030651688579-q04kt057ofuhkiv5dij48083e4loj327.apps.googleusercontent.com</string>
 
@@ -22,6 +23,19 @@
         <item>Safe Location</item>
         <item>Medication</item>
     </string-array>
+
+    <string-array name="frequency_array">
+        <item>daily</item>
+        <item>weekly</item>
+        <item>monthly</item>
+    </string-array>
+
+    <string name="privacy_notice_title">Privacy Notice</string>
+    <string name="privacy_notice_msg">
+        By using this app I agree to have my personal information such as my name,
+        address, phone number, etc., stored in this application.
+        We will not use your information outside of this application.
+    </string>
     <string name="disclaimer_body">
         This app is not a substitute for emergency services.
         Do not rely on it during a crisis.

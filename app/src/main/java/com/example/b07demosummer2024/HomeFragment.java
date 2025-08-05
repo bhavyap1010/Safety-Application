@@ -20,6 +20,7 @@ public class HomeFragment extends Fragment {
         Button buttonScroller = view.findViewById(R.id.buttonScroller);
         Button buttonSpinner = view.findViewById(R.id.buttonSpinner);
         Button buttonManageItems = view.findViewById(R.id.buttonManageItems);
+        Button buttonManageReminders = view.findViewById(R.id.buttonManageReminders);
         Button buttonViewSupportPage = view.findViewById(R.id.buttonViewSupportPage);
 
         buttonRecyclerView.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +61,11 @@ public class HomeFragment extends Fragment {
                         .commit();
 
                 ;}
+        });
+
+        buttonManageReminders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { loadFragment(new RemindersFragment());}
         });
 
         buttonViewSupportPage.setOnClickListener(new View.OnClickListener() {
