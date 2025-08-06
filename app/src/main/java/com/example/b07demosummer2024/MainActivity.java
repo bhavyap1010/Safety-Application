@@ -95,7 +95,7 @@ if(task.getResult().getValue(Integer.class) !=null) {
                 }
                 } else {
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.questionaire_fragment, new QuestionnaireFragment())
+                            .add(R.id.fragment_container, new QuestionnaireFragment())
                             .commit();
                 }
             }
@@ -138,15 +138,18 @@ if(task.getResult().getValue(Integer.class) !=null) {
             logout();
             return true;
         } else if (item.getItemId() == R.id.action_change_pin) {
-            // Handle the "Change pin" action here
-            // For example, you might start a new Activity or show a Dialog:
+
              Intent intent = new Intent(this, PinSetupActivity.class);
             startActivity(intent);
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_home) {
-            // Handle the "Home" action here
-            loadFragment(new HomeFragment());
+            findViewById(R.id.main).setVisibility(View.GONE);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
+                    .commit();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -186,10 +189,10 @@ if(task.getResult().getValue(Integer.class) !=null) {
 
     public void nowPlan() {
 
-        Fragment q  = getSupportFragmentManager().findFragmentById(R.id.questionaire_fragment);
+        Fragment q  = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(q!=null) {
             getSupportFragmentManager().beginTransaction()
-                    .remove(q)
+                    .replace(R.id.fragment_container, new Fragment())
                     .commit();
         }
 

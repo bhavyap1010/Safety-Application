@@ -35,6 +35,28 @@
         android:hint="Enter Answer"
         android:layout_marginTop="20dp" />
 
+    <Spinner
+        android:id="@+id/cityChoices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <CheckBox android:id="@+id/Physical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Physical" />
+    <CheckBox android:id="@+id/Emotional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Emotional"/>
+    <CheckBox android:id="@+id/Financial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Financial" />
+    <CheckBox android:id="@+id/Other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Other"/>
+
     <Button
         android:id="@+id/SubmitB"
         android:layout_width="150dp"
@@ -70,9 +92,25 @@
         android:paddingTop="100dp"
         android:paddingRight="15dp"/>
 
+    <TextView
+        android:id="@+id/followUpQ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@android:color/black"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/followUpA"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_marginTop="20dp" />
 
 
 
-    </LinearLayout>
+
+</LinearLayout>
+
 
 
