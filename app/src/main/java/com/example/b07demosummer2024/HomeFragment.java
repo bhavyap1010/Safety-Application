@@ -22,6 +22,8 @@ public class HomeFragment extends Fragment {
         Button buttonManageItems = view.findViewById(R.id.buttonManageItems);
         Button buttonManageReminders = view.findViewById(R.id.buttonManageReminders);
         Button buttonViewSupportPage = view.findViewById(R.id.buttonViewSupportPage);
+        Button buttonViewPlan = view.findViewById(R.id.buttonViewPlan);
+        Button buttonViewQuestionnaire = view.findViewById(R.id.buttonViewQuestionnaire);
 
         buttonRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +75,28 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new SupportFragment())
+                        .commit();
+
+                ;}
+
+        });
+
+        buttonViewPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new PlanFragment())
+                        .commit();
+
+                ;}
+
+        });
+
+        buttonViewQuestionnaire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new QuestionnaireFragment())
                         .commit();
 
                 ;}

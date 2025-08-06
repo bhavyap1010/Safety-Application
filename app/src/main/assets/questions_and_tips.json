@@ -3,9 +3,9 @@
 		"id": "wu_01",
 		"question": "Which best describes your situation?",
 		"tips": {
-			"Still in a relationship": "Keep this plan updated, and remember you can always reach out if things escalate.",
-			"Planning to leave": "Start packing small items now so you're ready when you decide to leave.",
-			"Post-separation": "It's normal to feel unsettled, refer back to this plan whenever you need a safety reminder."
+			"Still in a Relationship": "Keep this plan updated, and remember you can always reach out if things escalate.",
+			"Planning to Leave": "Start packing small items now so you're ready when you decide to leave.",
+			"Post-Separation": "It's normal to feel unsettled, refer back to this plan whenever you need a safety reminder."
 		}
 	},
 	{
@@ -35,8 +35,9 @@
 	{
 		"id": "wu_05",
 		"question": "Do you have children?",
+		"fid": "f_01",
 		"tips": {
-			"Yes": "Practice your safety plan with your children so that when they hear {user_answer}, they know exactly what to do.",
+			"Yes": "Practice your safety plan with your children so that when they hear {code_word}, they know exactly what to do.",
 			"No": "Even without children, it helps to identify a second safe place in your home."
 		}
 	},
@@ -87,8 +88,9 @@
 	{
 		"id": "pl_04",
 		"question": "Have you identified a safe place to stay?",
+		"fid": "f_02",
 		"tips": {
-			"Yes": "Make sure {user_answer} knows you may arrive unexpectedly and how to contact you.",
+			"Yes": "Make sure {temp_shelter} knows you may arrive unexpectedly and how to contact you.",
 			"No": "Reach out to Victim Services Toronto or a trusted friend now to secure a shelter option before you leave."
 		}
 	},
@@ -103,16 +105,18 @@
 	{
 		"id": "ps_02",
 		"question": "Do you have a protection order? If yes, which type?",
+		"fid": "f_03",
 		"tips": {
-			"Yes": "Carry your {user_answer} at all times and share copies with anyone who needs to know.",
+			"Yes": "Carry your {legal_order} at all times and share copies with anyone who needs to know.",
 			"No": "Consider applying for a protection order; it can help deter unwanted contact."
 		}
 	},
 	{
 		"id": "ps_03",
 		"question": "Are you using any safety tools (cameras, door alarms)?",
+		"fid": "f_04",
 		"tips": {
-			"Yes": "Make sure your {user_answer} is in working order and placed where you'll notice it.",
+			"Yes": "Make sure your {equipment} is in working order and placed where you'll notice it.",
 			"No": "Consider installing a simple door alarm or camera to alert you to unexpected entry."
 		}
 	},
