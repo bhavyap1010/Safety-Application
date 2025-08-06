@@ -1,162 +1,169 @@
 {
-	
-"Branch": {
-	"Common Warm-Up Questions": [
-	{
-		  "Question": "Which best describes your situation?",
-		"id": "wu_01",
-		  "Type": "Select One",
 
-		  "Choices": ["Still in a relationship", "Planning to leave", "Post-separation"]
-	},
-	{
-		"Question": "What city do you live in?",
-		"id": "wu_02",
+	"Branch": {
+		"Common Warm-Up Questions": [
+			{
+				"Question": "Which best describes your situation?",
+				"id": "wu_01",
+				"Type": "Select One",
 
-		"Type": "free-form"
+				"Choices": ["Still in a relationship", "Planning to leave", "Post-separation"]
+			},
+			{
+				"Question": "What city do you live in?",
+				"id": "wu_02",
 
-		  
-	},
-	
-	{
-		"Question": "Which room in your home feels the safest if you need to get away quickly?",
-		"id": "wu_03",
+				"Type": "free-form"
 
-		"Type": "free-form"
 
-		  
-	},
-	
-	
-	{
-		  "Question": "Who do you live with?",
-		  "Type": "Select One",
-		"id": "wu_04",
+			},
 
-		"Choices": ["Family", "Roommates", "Alone", "Partner"]
-	},
+			{
+				"Question": "Which room in your home feels the safest if you need to get away quickly?",
+				"id": "wu_03",
 
-	{
-		  "Question": "Do you have children?",
-		  "Type": "Select One + free form",
-		"id": "wu_05",
+				"Type": "free-form"
 
-		  "Choices": ["Yes", "No"],
-		  "Then": "then enter a code word:"
+
+			},
+
+
+			{
+				"Question": "Who do you live with?",
+				"Type": "Select One",
+				"id": "wu_04",
+
+				"Choices": ["Family", "Roommates", "Alone", "Partner"]
+			},
+
+			{
+				"Question": "Do you have children?",
+				"Type": "Select One + free form",
+				"id": "wu_05",
+				"fid": "f_01",
+
+				"Choices": ["Yes", "No"],
+				"follow": "then enter a code word:"
+			}
+
+
+
+		],
+		"Still in a Relationship":[
+			{
+
+				"Question": "Which form(s) of abuse are you experiencing?",
+				"id": "sr_01",
+
+				"Type": "Select One + free form",
+				"Choices": ["Physical", "Emotional", "Financial", "Other"]
+
+			},
+
+			{
+
+				"Question": "Are you recording the incidents (dates, times, details)?",
+				"Type": "Select One",
+				"id": "sr_02",
+
+				"Choices": ["Yes", "No"]
+
+			},
+
+			{
+
+				"Question": "Name one person you can call immediately in an emergency.",
+				"id": "sr_03",
+
+				"Type": "free-form"
+
+			}
+
+		],
+
+		"Planning to Leave":[
+			{
+
+				"Question": "When do you plan to leave?",
+				"id": "pl_01",
+
+				"Type": "free-form"
+			},
+
+			{
+
+				"Question": "Do you have a go-bag packed with essentials?",
+				"id": "pl_02",
+
+				"Type": "Select One",
+				"Choices": ["Yes", "No"]
+
+			},
+
+			{
+
+				"Question": "Where do you keep emergency cash or cards?",
+				"id": "pl_03",
+
+				"Type": "free-form"
+
+
+			},
+
+			{
+				"Question": "Have you identified a safe place to stay?",
+				"id": "pl_04",
+				"fid": "f_02",
+				"Type": "Select One + free form",
+				"Choices": ["Yes", "No"],
+				"follow": "enter a temporary shelter:"
+
+			}
+
+		],
+
+		"Post-Separation":[
+			{
+
+				"Question": "Has the abuser continued any contact?",
+
+				"id": "ps_01",
+				"Type": "Select One",
+				"Choices": ["Yes", "No"]
+			},
+
+			{
+
+				"Question": "Do you have a protection order? If yes, which type?",
+				"Type": "Select One + free form",
+				"id": "ps_02",
+				"fid": "f_03",
+				"Choices": ["Yes", "No"],
+				"follow": "then enter a legal order:"
+
+			},
+
+			{
+				"Question": "Are you using any safety tools (cameras, door alarms)?",
+				"id": "ps_03",
+				"fid": "f_04",
+				"Type": "Select One + free form",
+				"Choices": ["Yes", "No"],
+				"follow": "then enter an equipment:"
+
+			}
+
+		],
+
+		"Follow-Up & Stabilization": [
+			{
+				"Question": "Which type of support would help most right now?",
+				"id": "fu_01",
+				"Type": "Select One",
+				"Choices": ["Counselling", "Legal aid", "Financial guidance", "Co-parenting resources" ]
+			}
+
+		]
+
 	}
-
-
-
-],
-  "Still in a Relationship":[
-  {
-  
-	  "Question": "Which form(s) of abuse are you experiencing?",
-	  "id": "sr_01",
-
-	  "Type": "Select One + free form",
-	  "Choices": ["Physical", "Emotional", "Financial", "Other"]
-	  
-  }, 
-  
-  {
-	  
-	  "Question": "Are you recording the incidents (dates, times, details)?",
-	  "Type": "Select One",
-	  "id": "sr_02",
-
-	  "Choices": ["Yes", "No"]
-	  
-  }, 
-  
-  {
-	  
-	  "Question": "Name one person you can call immediately in an emergency.",
-	  "id": "sr_03",
-
-	  "Type": "free-form"
-	  
-  }
-  
-  ],
-  
-  "Planning to Leave":[
-  {
-  
-	  "Question": "When do you plan to leave?",
-	  "id": "pl_01",
-
-	  "Type": "free-form"	  
-  }, 
-  
-  {
-	  
-	  "Question": "Do you have a go-bag packed with essentials?",
-	  "id": "pl_02",
-
-	  "Type": "Select One",
-      "Choices": ["Yes", "No"]
-	  
-  }, 
-  
-  {
-	  
-	  "Question": "Where do you keep emergency cash or cards?",
-	  "id": "pl_03",
-
-	  "Type": "free-form"
-
-	  
-  },
-  
-  {
-	  "Question": "Have you identified a safe place to stay?",
-	  "id": "pl_04",
-	  "Type": "Select One + free form",
-      "Choices": ["Yes", "No"]
-	  
-  }
-  
-  ],
-  
-  "Post-Separation":[
-  {
-  
-	  "Question": "Has the abuser continued any contact?",
-
-	  "id": "ps_01",
-	  "Type": "Select One",
-      "Choices": ["Yes", "No"]
-  }, 
-  
-  {
-	  
-	  "Question": "Do you have a protection order? If yes, which type?",
-	  "Type": "Select One + free form",
-	  "id": "ps_02",
-      "Choices": ["Yes", "No"]
-	  
-  }, 
-  
-  {
-	  "Question": "Are you using any safety tools (cameras, door alarms)?",
-	  "id": "ps_03",
-	  "Type": "Select One + free form",
-      "Choices": ["Yes", "No"]
-	  
-  }
-  
-  ],
-  
-  "Follow-Up & Stabilization": [
-  {
-	"Question": "Which type of support would help most right now?",
-	  "id": "fu_01",
-	  "Type": "Select One",
-      "Choices": ["Counselling", "Legal aid", "Financial guidance", "Co-parenting resources" ]
-  }
-  
-  ]
-  
-}
 }
