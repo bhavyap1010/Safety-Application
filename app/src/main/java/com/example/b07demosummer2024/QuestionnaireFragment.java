@@ -412,18 +412,27 @@ public class QuestionnaireFragment extends Fragment {
                 }
 
                 if(Qnum==0) {
-                    currentAnswer.setVisibility(View.VISIBLE);
+                    /*
+                    if(!x.id.equals("wu_02")) {
+
+                        currentAnswer.setVisibility(View.VISIBLE);
+                    }
+
+                    Question finalX = x;
                     ref.child(userNow).child("wu_01").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             String yorn;
 
                             yorn = String.valueOf(task.getResult().getValue());
-                            currentAnswer.setVisibility(View.VISIBLE);
-                            currentAnswer.setText("Current Answer: " + yorn);
+                            if(!finalX.id.equals("wu_02")) {
+
+                                currentAnswer.setVisibility(View.VISIBLE);
+                                currentAnswer.setText("Current Answer: " + yorn + Qnum);
+                            }
                         }
                     });
-
+*/
                     statusGetter();
                 }
 
@@ -457,9 +466,12 @@ public class QuestionnaireFragment extends Fragment {
                 Button choiceButton;
                 input.setVisibility(View.GONE);
                 for (int i = 0; i < x.c.size(); i++) {
-                    currentAnswer.setVisibility(View.VISIBLE);
+                    if(!x.id.equals("wu_02")) {
 
-                    currentAnswer.setText("Current Answer: ");
+                        currentAnswer.setVisibility(View.VISIBLE);
+
+                        currentAnswer.setText("Current Answer: ");
+                    }
                     choiceButton = new Button(getContext());
                     choiceButton.setText(x.c.get(i));
                     buttons.addView(choiceButton);
@@ -471,8 +483,10 @@ public class QuestionnaireFragment extends Fragment {
                             String yorn;
                             if(task.isSuccessful() && task.getResult().exists()) {
                                 yorn = String.valueOf(task.getResult().getValue());
-                                currentAnswer.setVisibility(View.VISIBLE);
-                                currentAnswer.setText("Current Answer: "+ yorn);
+                                if(!x.id.equals("wu_02")) {
+                                    currentAnswer.setVisibility(View.VISIBLE);
+                                    currentAnswer.setText("Current Answer: " + yorn);
+                                }
                             }else {
                                 yorn="eempty";
                                 currentAnswer.setText("Current Answer: ");
@@ -501,8 +515,11 @@ public class QuestionnaireFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             x.answered = true;
-                            currentAnswer.setVisibility(View.VISIBLE);
-                            currentAnswer.setText("Current Answer: "+ current);
+                            if(!x.id.equals("wu_02")) {
+
+                                currentAnswer.setVisibility(View.VISIBLE);
+                                currentAnswer.setText("Current Answer: " + current);
+                            }
                             if(x.t.equals("Select One + free form") && current.equals("Yes")) {
 
                                 ref.child(userNow).child(x.fid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -662,6 +679,7 @@ public class QuestionnaireFragment extends Fragment {
             if(x.id.equals("wu_02")) {
                 input.setVisibility(View.GONE);
                 spinner.setVisibility(View.VISIBLE);
+                currentAnswer.setVisibility(View.GONE);
 
 // Create an ArrayAdapter using the string array and a default spinner layout.
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -712,15 +730,16 @@ public class QuestionnaireFragment extends Fragment {
         spinner.setVisibility(View.GONE);
         rootNode = FirebaseDatabase.getInstance();
         ref = rootNode.getReference("users");
-        currentAnswer.setVisibility(View.VISIBLE);
         ref.child(userNow).child("wu_01").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 String yorn;
                 if(task.isSuccessful() && task.getResult().exists()) {
                     yorn = String.valueOf(task.getResult().getValue());
-                    currentAnswer.setVisibility(View.VISIBLE);
-                    currentAnswer.setText("Current Answer: " + yorn);
+                    if(!question.getText().toString().equals("What city do you live in?")) {
+                        currentAnswer.setVisibility(View.VISIBLE);
+                        currentAnswer.setText("Current Answer: " + yorn);
+                    }
                 }
             }
         });
@@ -751,6 +770,7 @@ public class QuestionnaireFragment extends Fragment {
                     input.setVisibility(View.VISIBLE);
                     next.setVisibility(View.VISIBLE);
                     back.setVisibility(View.VISIBLE);
+                    currentAnswer.setVisibility(View.GONE);
                     rootNode = FirebaseDatabase.getInstance();
                     ref = rootNode.getReference("users");
                     String response = current;

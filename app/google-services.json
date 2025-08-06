@@ -15,11 +15,51 @@
       },
       "oauth_client": [
         {
+          "client_id": "1030651688579-7q1kv9kqsjv1dko6s4ekhhbdsq7q1la1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.b07demosummer2024",
+            "certificate_hash": "69ea5d80cf7d5371bf17c66b6bdb878ebb5387f7"
+          }
+        },
+        {
+          "client_id": "1030651688579-c8b605f11rt6m943j9vekricu340s2hs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.b07demosummer2024",
+            "certificate_hash": "f3bbed942454d8d4e21f39a1f83f501c1652a1d3"
+          }
+        },
+        {
           "client_id": "1030651688579-f5t94oi02rjbn6a3gsk2sg5phtvhamp9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.b07demosummer2024",
             "certificate_hash": "0cd01b240a8692068cd16d055e6330e0c4a6c850"
+          }
+        },
+        {
+          "client_id": "1030651688579-fpfp7f49tg1nu1d85lghthiftg8d7mds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.b07demosummer2024",
+            "certificate_hash": "5db94972365a27077e2cfbf6751245a8f2a8fa55"
+          }
+        },
+        {
+          "client_id": "1030651688579-opaa127rcod6b5n1hmbiub4s43n3n3t2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.b07demosummer2024",
+            "certificate_hash": "1731f78a521425a8fec715ec7c4981190702a55d"
+          }
+        },
+        {
+          "client_id": "1030651688579-upqvhc745nrermo7lck11bksdo1h39ka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.b07demosummer2024",
+            "certificate_hash": "1753ca0dd7332b0961f37ac7379462b3d819f7a0"
           }
         },
         {
