@@ -100,9 +100,27 @@ public class PlanFragment extends Fragment {
                 }
 
 
+                // filter out the objects based on their prefixes
+                // so only use the ones which are related to user's branch, such as sr = Still in a Relationship
+                String initStatus = answerMap.get("wu_01");
+                String prefix = null;
+
+                if ("Still in a Relationship".equalsIgnoreCase(initStatus)) {
+                    prefix = "sr_";
+                } else if ("Planning to leave".equalsIgnoreCase(initStatus)) {
+                    prefix = "pl_";
+                } else if ("Post-separation".equalsIgnoreCase(initStatus)) {
+                    prefix = "ps_";
+                }
+
                 for (Map.Entry<String, String> entry : answerMap.entrySet()) {
                     String questionID = entry.getKey();
                     String answer = entry.getValue();
+
+                    // if there is a prefix, but not the one we want, so skip (i.e. continue)
+                    if (prefix != null && !questionID.startsWith(prefix) && !questionID.startsWith("wu_") && !questionID.startsWith("f_")) {
+                        continue;
+                    }
 
                     for (Question q : templates) {
                         if (q.getId().equals(questionID)) {
@@ -160,9 +178,6 @@ public class PlanFragment extends Fragment {
                 tipTemplate = tipTemplate.replace("{" + placeholder + "}", "[not provided]");
             }
         }
-
-        // FINAL SANITY: No raw curly placeholders left
-        // tipTemplate = tipTemplate.replaceAll("\\{[^}]+\\}", "[missing]");
 
         return tipTemplate;
     }
