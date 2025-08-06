@@ -1,7 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.B07DemoSummer2024" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!-- Base application theme with ActionBar for post-login screens -->
+    <style name="Base.Theme.B07DemoSummer2024" parent="Theme.Material3.DayNight">
+        <item name="colorPrimary">#3F4A6B</item>
+        <item name="colorPrimaryVariant">#3F4A6B</item>
+        <item name="android:statusBarColor">#3F4A6B</item>
+        <item name="android:navigationBarColor">#3F4A6B</item>
+    </style>
+
+    <!-- Login-specific theme with no ActionBar for login screen -->
+    <style name="Theme.B07DemoSummer2024.Login" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#3F4A6B</item>
+        <item name="colorPrimaryVariant">#3F4A6B</item>
+        <item name="android:statusBarColor">#3F4A6B</item>
+        <item name="android:navigationBarColor">#3F4A6B</item>
     </style>
 </resources>

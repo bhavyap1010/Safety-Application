@@ -19,7 +19,8 @@
         <!-- Login activity (displays as first screen) -->
         <activity
             android:name=".LoginActivityView"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.B07DemoSummer2024.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
