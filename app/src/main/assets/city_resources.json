@@ -11,7 +11,7 @@
             "hotlines": {
                 "name": "211 Ontario",
                 "phone": "1-877-330-3213",
-                "address": "Not available",
+                "address": "Saint Clair Avenue West 1, Toronto, ON M4V 1K6",
                 "website": "https://211ontario.ca/211-help-starts-here/"
             },
             "shelters": {
@@ -23,7 +23,7 @@
             "legal_aid": {
                 "name": "Legal Aid Ontario",
                 "phone": "1-800-668-8258",
-                "address": "Not available",
+                "address": "695 Markham Road Suite 9, Scarborough, ON M1H 2A5",
                 "website": "https://www.legalaid.on.ca/"
             },
             "police": {
@@ -38,25 +38,25 @@
             "victim_services": {
                 "name": "Crime Victims Assistance Centres (CAVAC)",
                 "phone": "1 866-532-2822",
-                "address": "Not available",
+                "address": "Please contact the given phone number, and they will connect you to the nearest CAVAC",
                 "website": "https://cavac.qc.ca/en/"
             },
             "hotlines": {
                 "name": "211 Grand Montreal Gatineau",
                 "phone": "211",
-                "address": "Not available",
+                "address": "101-3155 rue Hochelaga, Montreal, QC H1W 1G4",
                 "website": "https://www.211qc.ca/en/psychosocial-support/helplines-talklines"
             },
             "shelters": {
                 "name": "211 Grand Montreal Gatineau",
                 "phone": "211",
-                "address": "Not available",
+                "address": "101-3155 rue Hochelaga, Montreal, QC H1W 1G4",
                 "website": "https://www.211qc.ca/en/homelessness/shelters-housing-homeless-people"
             },
             "legal_aid": {
                 "name": "Legal Aide Montreal",
                 "phone": "514-864-2111",
-                "address": "Not available",
+                "address": "201 Boul Crémazie E #3eme, Montréal, QC H2M 1M2",
                 "website": "https://www.aidejuridiquedemontreal.ca/en/services-legal-aid/#:~:text=Make%20an%20appointment%20to%20consult%20one%20of%20our,not%20you%20are%20financially%20eligible%20for%20legal%20aid."
             },
             "police": {
@@ -77,19 +77,19 @@
             "hotlines": {
                 "name": "Government of British Columbia",
                 "phone": "1-800-663-7867",
-                "address": "Not available",
+                "address": "PO Box 9412 STN PROV GOVT, Victoria, BC, V8W 9V1",
                 "website": "https://www2.gov.bc.ca/gov/content/health/managing-your-health/mental-health-substance-use/crisis-and-information-lines"
             },
             "shelters": {
                 "name": "United Way British Columbia",
                 "phone": "211",
-                "address": "Not available",
+                "address": "4543 Canada Way, Burnaby, BC V5G 4T4",
                 "website": "https://bc.211.ca/shelter-lists/"
             },
             "legal_aid": {
                 "name": "Legal Aid BC",
                 "phone": "604-408-2172 (Greater Vancouver) & 1-866-577-2525 (elsewhere in BC)",
-                "address": "Not available",
+                "address": "400 – 510 Burrard St., Vancouver, BC V6C 3A8",
                 "website": "https://legalaid.bc.ca/"
             },
             "police": {
@@ -110,19 +110,19 @@
             "hotlines": {
                 "name": "211 Alberta",
                 "phone": "1-800-232-7288",
-                "address": "Not available",
+                "address": "15132 Stony Plain Road, Edmonton, AB T5P 3Y3",
                 "website": "https://ab.211.ca/how-we-help/helplines/"
             },
             "shelters": {
                 "name": "Government of Alberta",
-                "phone": "Not found",
-                "address": "Not available",
+                "phone": "403-297-2283",
+                "address": "601 5 St Sw, Calgary, AB T2P 5P7",
                 "website": "https://www.alberta.ca/find-shelters"
             },
             "legal_aid": {
                 "name": "Legal Aid Alberta",
                 "phone": "1-866-845-3425",
-                "address": "Not available",
+                "address": "900 Sun Life Place, 10123 99 St NW, Edmonton, AB T5J 3H1",
                 "website": "https://www.legalaid.ab.ca/"
             },
             "police": {
@@ -149,13 +149,13 @@
             "shelters": {
                 "name": "211 Ontario",
                 "phone": "211",
-                "address": "Not available",
+                "address": "Saint Clair Avenue West 1, Toronto, ON M4V 1K6",
                 "website": "https://211ontario.ca/results/?searchLocation=Ottawa&latitude=45.4215296&longitude=-75.69719309999999&topicPath=105"
             },
             "legal_aid": {
                 "name": "Legal Aid Ontario",
                 "phone": "1-800-668-8258",
-                "address": "Not available",
+                "address": "695 Markham Road Suite 9, Scarborough, ON M1H 2A5",
                 "website": "https://www.legalaid.on.ca/"
             },
             "police": {
