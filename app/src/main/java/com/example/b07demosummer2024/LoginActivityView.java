@@ -130,9 +130,8 @@ public class LoginActivityView extends AppCompatActivity implements LoginActivit
     }
 
     @Override
-    public void startPinSetupActivity(boolean isNewAccount) {
+    public void startPinSetupActivity() {
         Intent intent = new Intent(LoginActivityView.this, PinSetupActivity.class); // Or your actual PIN setup activity name
-        intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);
         startActivity(intent);
         finish(); // Close login activity
     }
