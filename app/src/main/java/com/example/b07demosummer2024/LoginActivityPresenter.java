@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 public class LoginActivityPresenter {
 
     private static final String TAG = "LoginActivity";
@@ -12,7 +15,7 @@ public class LoginActivityPresenter {
         void showToast(String message);
         void startMainActivity(boolean isNewAccount);
         void startPinLoginActivity();
-        void startPinSetupActivity(boolean isNewAccount);
+        void startPinSetupActivity();
         String getEmailText();
         String getPasswordText();
         void showSuccessMessage(String message);
@@ -34,15 +37,9 @@ public class LoginActivityPresenter {
     public void checkIfUserLoggedIn() {
         FirebaseUser currentUser = model.getCurrentUser();
         if (currentUser != null) {
-
             if (pinManager.isPinEnabled(view.getContext(), model.getCurrentUser().getUid())) {
-                // PIN is set up, go to PIN login screen
                 view.startPinLoginActivity();
             } else {
-                // PIN not set up, but user is logged in (e.g., from a previous session before PIN feature)
-                // Decide the flow: go to main activity or prompt for PIN setup.
-                // For now, let's assume if Firebase user exists and no PIN, go to main.
-                // Or, you could force PIN setup here as well.
                 view.startMainActivity(false);
             }
         }
@@ -57,7 +54,12 @@ public class LoginActivityPresenter {
             public void onSuccess(boolean isNew) {
                 Log.d(TAG, "signInWithEmail:success");
                 view.showSuccessMessage("Login successful");
-                view.startMainActivity(isNew);
+
+                if (pinManager.isPinEnabled(view.getContext(), model.getCurrentUser().getUid())) {
+                    view.startMainActivity(isNew);
+                } else {
+                    view.startPinSetupActivity();
+                }
             }
 
             @Override
@@ -89,9 +91,8 @@ public class LoginActivityPresenter {
                 // The getCurrentUser() in the model will now return the new user.
                 Log.d(TAG, "createUserWithEmail:success - User registered and signed in.");
 
-                // Now, guide the new user to set up a PIN
                 view.showSuccessMessage("Registration successful! Please set up your PIN.");
-                view.startPinSetupActivity(true); // Navigate to PIN setup screen
+                view.startPinSetupActivity(); // Navigate to PIN setup screen
             }
 
             @Override
