@@ -7,8 +7,6 @@
     <string name="save_edit">Save</string>
     <string name="back">Back</string>
     <string name="recyclerview">Items</string>
-    <string name="scroller">Scroller</string>
-    <string name="spinner">Spinner</string>
     <string name="manage_items">Manage Items</string>
     <string name="manage_reminders">Manage Reminders</string>
     <string name="next">Next</string>
