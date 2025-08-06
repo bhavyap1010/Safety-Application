@@ -24,12 +24,10 @@ public class ReminderWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        String title = getInputData().getString("title");
-        String message = getInputData().getString("message");
         int notificationId = getInputData().getInt("notificationId", 0);
 
         createNotificationChannel();
-        showNotification(title, message, notificationId);
+        showNotification("Reminder", "You have a notification from B07 App", notificationId);
 
         return Result.success();
     }

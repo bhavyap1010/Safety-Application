@@ -43,10 +43,8 @@ public class ReminderScheduler {
             // Calculate the delay in minutes
             long delayInMinutes = (scheduledTime.getTimeInMillis() - now.getTimeInMillis()) / (60 * 1000);
 
-            // Create the work request
+            // Create the work request with minimal data
             Data inputData = new Data.Builder()
-                .putString("title", reminder.getTitle())
-                .putString("message", "Time for your " + reminder.getFrequency() + " reminder!")
                 .putInt("notificationId", reminder.getId().hashCode())
                 .build();
 
@@ -87,8 +85,6 @@ public class ReminderScheduler {
         long delayInMinutes = (nextSchedule.getTimeInMillis() - System.currentTimeMillis()) / (60 * 1000);
 
         Data inputData = new Data.Builder()
-            .putString("title", reminder.getTitle())
-            .putString("message", "Time for your " + reminder.getFrequency() + " reminder!")
             .putInt("notificationId", reminder.getId().hashCode())
             .build();
 
