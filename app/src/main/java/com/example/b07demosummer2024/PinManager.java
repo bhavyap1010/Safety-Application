@@ -31,7 +31,6 @@ public class PinManager {
         );
     }
 
-    // Call this after successful registration and PIN setup
     public boolean storePin(Context context, String pin, String userID) {
         String hashedPin = hashFunction(pin);
 
@@ -47,7 +46,6 @@ public class PinManager {
         }
     }
 
-    // Call this during PIN login to verify
     public boolean verifyPin(Context context, String enteredPin, String userID) {
         String hashedEnteredPin = hashFunction(enteredPin);
 
@@ -80,12 +78,7 @@ public class PinManager {
         }
     }
 
-    // You'll need to implement a robust hashing function
-    // Example (conceptual, use a proper library like Argon2 or SCrypt)
     private String hashFunction(String pin) {
-        // Use a strong hashing algorithm with a salt.
-        // For example, using SCrypt or Argon2 via a library.
-        // This is a placeholder and NOT secure for production.
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(pin.getBytes(StandardCharsets.UTF_8));

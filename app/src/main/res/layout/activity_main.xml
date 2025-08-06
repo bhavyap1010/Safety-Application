@@ -7,10 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/questionaire_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
     <!-- Fragment container for navigation -->
     <FrameLayout
@@ -21,32 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:visibility="gone">
-
-            <!-- Title -->
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Your Personalized Safety Plan"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:padding="16dp" />
-
-            <!-- Recycler View to display the plan items -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/planItems"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
     </FrameLayout>
 
     <!-- Exit button -->

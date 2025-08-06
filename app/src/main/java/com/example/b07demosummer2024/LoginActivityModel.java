@@ -13,7 +13,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class LoginActivityModel {
 
     public interface AuthCallback {
-        void onSuccess();
+        void onSuccess(boolean isNewAccount);
         void onFailure(String errorMessage);
     }
 
@@ -38,7 +38,10 @@ public class LoginActivityModel {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            callback.onSuccess();
+                            boolean isNew = task.getResult() != null &&
+                                            task.getResult().getAdditionalUserInfo() != null &&
+                                            task.getResult().getAdditionalUserInfo().isNewUser();
+                            callback.onSuccess(isNew);
                         } else {
                             Exception exception = task.getException();
                             String errorMessage = "Login failed";
@@ -72,7 +75,7 @@ public class LoginActivityModel {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            callback.onSuccess();
+                            callback.onSuccess(true);
                         } else {
                             Exception exception = task.getException();
                             String errorMessage = "Registration failed";
@@ -92,7 +95,8 @@ public class LoginActivityModel {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            callback.onSuccess();
+                            boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+                            callback.onSuccess(isNew);
                         } else {
                             Exception exception = task.getException();
                             String errorMessage = "Authentication failed";
@@ -114,7 +118,7 @@ public class LoginActivityModel {
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        callback.onSuccess();
+                        callback.onSuccess(false);
                     } else {
                         Exception exception = task.getException();
                         String errorMessage = "Failed to send reset email";

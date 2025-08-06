@@ -34,8 +34,9 @@ public class LoginActivityView extends AppCompatActivity implements LoginActivit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize presenter
-        presenter = new LoginActivityPresenter(this);
+        LoginActivityModel model = new LoginActivityModel();
+        PinManager pinManager = new PinManager();
+        presenter = new LoginActivityPresenter(this, model, pinManager);
 
         // Configure Google sign in with account selection prompt
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -114,8 +115,9 @@ public class LoginActivityView extends AppCompatActivity implements LoginActivit
     }
 
     @Override
-    public void startMainActivity() {
+    public void startMainActivity(boolean isNewAccount) {
         Intent intent = new Intent(LoginActivityView.this, MainActivity.class);
+        intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);
         startActivity(intent);
         finish(); // Close login activity so user can't go back to it
     }

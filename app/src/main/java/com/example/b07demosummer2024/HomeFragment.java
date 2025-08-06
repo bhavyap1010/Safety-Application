@@ -20,37 +20,87 @@ public class HomeFragment extends Fragment {
         Button buttonScroller = view.findViewById(R.id.buttonScroller);
         Button buttonSpinner = view.findViewById(R.id.buttonSpinner);
         Button buttonManageItems = view.findViewById(R.id.buttonManageItems);
+        Button buttonManageReminders = view.findViewById(R.id.buttonManageReminders);
         Button buttonViewSupportPage = view.findViewById(R.id.buttonViewSupportPage);
+        Button buttonViewPlan = view.findViewById(R.id.buttonViewPlan);
+        Button buttonViewQuestionnaire = view.findViewById(R.id.buttonViewQuestionnaire);
 
         buttonRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new RecyclerViewFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new RecyclerViewFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonScroller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new ScrollerFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new ScrollerFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new SpinnerFragment());
-            }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new SpinnerFragment())
+                        .commit();
+
+                ;}
         });
 
         buttonManageItems.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { loadFragment(new ManageItemsFragment());}
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new ManageItemsFragment())
+                        .commit();
+
+                ;}
+        });
+
+        buttonManageReminders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { loadFragment(new RemindersFragment());}
         });
 
         buttonViewSupportPage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { loadFragment(new SupportFragment());}
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new SupportFragment())
+                        .commit();
+
+                ;}
+
+        });
+
+        buttonViewPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new PlanFragment())
+                        .commit();
+
+                ;}
+
+        });
+
+        buttonViewQuestionnaire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new QuestionnaireFragment())
+                        .commit();
+
+                ;}
+
         });
 
         return view;
