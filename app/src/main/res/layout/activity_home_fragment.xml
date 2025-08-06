@@ -38,21 +38,11 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonScroller" />
 
     <Button
-        android:id="@+id/buttonManageItems"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/manage_items"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonManageReminders"/>
-
-    <Button
         android:id="@+id/buttonManageReminders"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/manage_reminders"
-        app:layout_constraintTop_toBottomOf="@+id/buttonManageItems"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/buttonViewSupportPage"/>

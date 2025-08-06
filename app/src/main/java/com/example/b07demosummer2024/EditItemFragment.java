@@ -205,7 +205,7 @@ public class EditItemFragment extends Fragment {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            startActivity(new Intent(getActivity(), LoginActivityView.class));
             if (getActivity() != null) getActivity().finish();
             return;
         }
@@ -302,7 +302,7 @@ public class EditItemFragment extends Fragment {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            startActivity(new Intent(getActivity(), LoginActivityView.class));
             if (getActivity() != null) getActivity().finish();
             return;
         }
