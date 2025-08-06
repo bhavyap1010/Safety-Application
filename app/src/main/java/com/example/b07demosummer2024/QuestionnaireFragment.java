@@ -104,6 +104,7 @@ public class QuestionnaireFragment extends Fragment {
     String statchoice;
     TextView qNum;
     TextView followUpQ;
+    TextView currentAnswer;
     EditText followUpA;
     LinearLayout buttons;
 
@@ -138,6 +139,7 @@ public class QuestionnaireFragment extends Fragment {
         financial= v.findViewById(R.id.Financial);
         emotional = v.findViewById(R.id.Emotional);
         other = v.findViewById(R.id.Other);
+        currentAnswer = v.findViewById(R.id.currentAnswer);
 
         physical.setVisibility(View.GONE);
         financial.setVisibility(View.GONE);
@@ -405,6 +407,18 @@ public class QuestionnaireFragment extends Fragment {
                 }
 
                 if(Qnum==0) {
+                    currentAnswer.setVisibility(View.VISIBLE);
+                    ref.child(userNow).child("wu_01").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            String yorn;
+
+                            yorn = String.valueOf(task.getResult().getValue());
+                            currentAnswer.setVisibility(View.VISIBLE);
+                            currentAnswer.setText("Current Answer: " + yorn);
+                        }
+                    });
+
                     statusGetter();
                 }
 
@@ -422,6 +436,8 @@ public class QuestionnaireFragment extends Fragment {
         next.setVisibility(View.VISIBLE);
         back.setVisibility(View.VISIBLE);
         qNum.setVisibility(View.VISIBLE);
+        currentAnswer.setVisibility(View.GONE);
+
 
 
         followUpQ.setVisibility(View.GONE);
@@ -436,6 +452,9 @@ public class QuestionnaireFragment extends Fragment {
                 Button choiceButton;
                 input.setVisibility(View.GONE);
                 for (int i = 0; i < x.c.size(); i++) {
+                    currentAnswer.setVisibility(View.VISIBLE);
+
+                    currentAnswer.setText("Current Answer: ");
                     choiceButton = new Button(getContext());
                     choiceButton.setText(x.c.get(i));
                     buttons.addView(choiceButton);
@@ -447,8 +466,11 @@ public class QuestionnaireFragment extends Fragment {
                             String yorn;
                             if(task.isSuccessful() && task.getResult().exists()) {
                                 yorn = String.valueOf(task.getResult().getValue());
+                                currentAnswer.setVisibility(View.VISIBLE);
+                                currentAnswer.setText("Current Answer: "+ yorn);
                             }else {
                                 yorn="eempty";
+                                currentAnswer.setText("Current Answer: ");
                             }
 
                             if(x.t.equals("Select One + free form") && yorn.equals("Yes")) {
@@ -474,7 +496,8 @@ public class QuestionnaireFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             x.answered = true;
-
+                            currentAnswer.setVisibility(View.VISIBLE);
+                            currentAnswer.setText("Current Answer: "+ current);
                             if(x.t.equals("Select One + free form") && current.equals("Yes")) {
 
                                 ref.child(userNow).child(x.fid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -682,9 +705,20 @@ public class QuestionnaireFragment extends Fragment {
         followUpA.setVisibility(View.GONE);
         buttons.removeAllViews();
         spinner.setVisibility(View.GONE);
-
-
-
+        rootNode = FirebaseDatabase.getInstance();
+        ref = rootNode.getReference("users");
+        currentAnswer.setVisibility(View.VISIBLE);
+        ref.child(userNow).child("wu_01").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                String yorn;
+                if(task.isSuccessful() && task.getResult().exists()) {
+                    yorn = String.valueOf(task.getResult().getValue());
+                    currentAnswer.setVisibility(View.VISIBLE);
+                    currentAnswer.setText("Current Answer: " + yorn);
+                }
+            }
+        });
 
 
         question.setText("Which best describes your situation?");
