@@ -39,8 +39,6 @@ import android.net.Uri;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private static final String PREFS_NAME = "prefs";
-    private static final String KEY_PRIVACY_AGREED = "privacy_agreed";
 
 
     @Override
@@ -68,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivityView.class));
             finish();
             return;
+        }
+
+        if (getIntent().getBooleanExtra("NEW_ACCOUNT_CREATED", false)) {
+            showDisclaimer();
         }
 
         // just in case: if we need it
@@ -153,5 +155,17 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, new PlanFragment())
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public void showDisclaimer() {
+        View noticeView = getLayoutInflater()
+                .inflate(R.layout.disclaimers, null, false);
+
+        new AlertDialog.Builder(this)
+                .setView(noticeView)
+                .setCancelable(false)
+                .setPositiveButton(R.string.i_understand, (d, w) -> {
+                })
+                .show();
     }
 }
