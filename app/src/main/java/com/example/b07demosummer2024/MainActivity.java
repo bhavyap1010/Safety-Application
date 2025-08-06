@@ -36,7 +36,7 @@ import android.widget.Button;
 import android.content.Intent;
 import android.net.Uri;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
 //    private FirebaseDatabase db;
     private FirebaseAuth mAuth;
@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(browser);
             finishAndRemoveTask();
         });
-        //End of new
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -72,11 +71,6 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra("NEW_ACCOUNT_CREATED", false)) {
             showDisclaimer();
         }
-
-        // just in case: if we need it
-        // if (savedInstanceState == null) {
-        //      loadFragment(new HomeFragment());
-        // }
 
         DatabaseReference r= FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid()).child("done");
         r.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -132,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadFragment(Fragment fragment) {
-        // Hide the main plan view when loading a fragment
-        // findViewById(R.id.main).setVisibility(View.GONE);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)

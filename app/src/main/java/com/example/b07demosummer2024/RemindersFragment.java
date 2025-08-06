@@ -39,11 +39,14 @@ public class RemindersFragment extends Fragment {
     private FirebaseDatabase db;
     private DatabaseReference remindersRef;
     private FirebaseAuth mAuth;
+    private ReminderScheduler reminderScheduler;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reminders, container, false);
+
+        reminderScheduler = new ReminderScheduler(requireContext());
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance("https://b07finalproject-23dae-default-rtdb.firebaseio.com/");
@@ -184,6 +187,7 @@ public class RemindersFragment extends Fragment {
             remindersRef.child(id).setValue(reminder).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "Reminder added successfully", Toast.LENGTH_SHORT).show();
+                    reminderScheduler.scheduleReminder(reminder);
                 } else {
                     Toast.makeText(getContext(), "Failed to add reminder", Toast.LENGTH_SHORT).show();
                 }
@@ -196,6 +200,7 @@ public class RemindersFragment extends Fragment {
         remindersRef.child(id).setValue(reminder).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(getContext(), "Reminder updated successfully", Toast.LENGTH_SHORT).show();
+                reminderScheduler.scheduleReminder(reminder);
             } else {
                 Toast.makeText(getContext(), "Failed to update reminder", Toast.LENGTH_SHORT).show();
             }
