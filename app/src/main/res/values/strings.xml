@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">CSCB07 Final Project</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="view_items">View Items</string>
+    <string name="view_items">Display Items</string>
     <string name="delete_item">Delete Item</string>
     <string name="add_item">Add Item</string>
+    <string name="save_edit">Save</string>
     <string name="back">Back</string>
-    <string name="recyclerview">RecyclerView</string>
+    <string name="recyclerview">Items</string>
     <string name="scroller">Scroller</string>
     <string name="spinner">Spinner</string>
     <string name="manage_items">Manage Items</string>

@@ -46,6 +46,9 @@ dependencies {
     implementation(libs.google.firebase.auth)
     implementation(libs.firebase.storage)
 
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+
     testImplementation(libs.junit)
     testImplementation("org.mockito:mockito-core:5.8.0")
     testImplementation("org.mockito:mockito-inline:5.2.0")
@@ -67,4 +70,6 @@ dependencies {
 
 
 
+
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 }

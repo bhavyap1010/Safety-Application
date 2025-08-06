@@ -38,6 +38,7 @@ import android.net.Uri;
 
 public class MainActivity extends AppCompatActivity {
 
+//    private FirebaseDatabase db;
     private FirebaseAuth mAuth;
 
 

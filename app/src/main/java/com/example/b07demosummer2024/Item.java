@@ -1,7 +1,9 @@
 package com.example.b07demosummer2024;
+import android.net.Uri;
 
-public class Item {
-
+import java.io.Serializable;
+public class Item implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String id;
     private String title;
     private String description;
@@ -17,14 +19,17 @@ public class Item {
     private String dosage;
     private String imageUrl;
     private String pdfUrl;
+    private String pdfName;
+    private String category;
 
     public Item() {}
 
-    public Item(String id, String title, String description, String date) {
+    public Item(String id, String title, String description, String date, String category) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.date = date;
+        this.category = category;
     }
 
     // Getters and setters
@@ -59,5 +64,10 @@ public class Item {
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public String getFileUrl() { return pdfUrl; }
     public void setFileUrl(String pdfUrl) { this.pdfUrl = pdfUrl; }
+    public String getPdfName() { return pdfName; }
+    public void setPdfName(String pdfName) { this.pdfName = pdfName; }
+    public String getCategory() {return category; }
+    public void setCategory(String category) { this.category = category; }
+
 
 }
