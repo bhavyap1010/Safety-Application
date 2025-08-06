@@ -17,7 +17,6 @@ public class PinSetupActivity extends AppCompatActivity {
     private EditText editTextPin, editTextConfirmPin;
     private Button buttonSubmitPin, buttonCancelPinSetup;
 
-    // Preference file name for EncryptedSharedPreferences
     private static final String PREFERENCE_FILE_KEY = "com.example.b07demosummer2024.PIN_PREFS";
     private static final String PIN_KEY = "user_pin";
 
@@ -45,9 +44,6 @@ public class PinSetupActivity extends AppCompatActivity {
 
         buttonSubmitPin.setOnClickListener(v -> setupPin(userID));
         buttonCancelPinSetup.setOnClickListener(v -> {
-            // Navigate back to login or handle cancellation appropriately
-            // For now, let's go back to LoginActivity
-            // Consider if the user should be logged out if they cancel PIN setup
             Intent intent = new Intent(PinSetupActivity.this, MainActivity.class);
             intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);
             startActivity(intent);
@@ -69,12 +65,10 @@ public class PinSetupActivity extends AppCompatActivity {
             return;
         }
 
-        // PIN is valid, save it securely
         if (pinManager.storePin(this, pin, userID)) { // Use PinManager
             Toast.makeText(this, "PIN setup successful!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);
-            // Navigate back to LoginActivity
             startActivity(intent);
             finish();
 

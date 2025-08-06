@@ -90,6 +90,10 @@ class Question {
         this.qs=q;
         this.f=f;
     }
+
+    public String getFid() {
+        return fid;
+    }
 }
 public class QuestionnaireFragment extends Fragment {
     FirebaseDatabase rootNode;
@@ -293,7 +297,8 @@ public class QuestionnaireFragment extends Fragment {
 
                             } else {
                                 question.setText("Thanks!!!");
-                                ((MainActivity) requireActivity()).nowPlan();
+                                ((MainActivity) requireActivity()).showPlanFragment();
+
                             }
                         }else {
                             //do nothing

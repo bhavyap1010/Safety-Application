@@ -22,7 +22,7 @@ public class PinLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pin_login); // Ensure this matches your layout file name
+        setContentView(R.layout.activity_pin_login);
 
         pinManager = new PinManager();
         mAuth = FirebaseAuth.getInstance();
@@ -46,8 +46,7 @@ public class PinLoginActivity extends AppCompatActivity {
 
         if (pinManager.verifyPin(this, enteredPin, userID)) {
             Toast.makeText(this, "PIN correct. Logging in...", Toast.LENGTH_SHORT).show();
-            loginAttempts = 0; // Reset attempts on success
-            // Navigate to your app's main screen
+            loginAttempts = 0;
             Intent intent = new Intent(PinLoginActivity.this, MainActivity.class);
             startActivity(intent);
             finishAffinity();
@@ -55,8 +54,6 @@ public class PinLoginActivity extends AppCompatActivity {
             loginAttempts++;
             if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
                 Toast.makeText(this, "Too many incorrect attempts. Switching to email login.", Toast.LENGTH_LONG).show();
-                // Optionally clear the PIN here or require email login for recovery
-                // pinManager.clearPin(this); // Be careful with this, user might just be forgetful
                 switchToEmailLogin();
             } else {
                 editTextLoginPin.setError("Incorrect PIN. " + (MAX_LOGIN_ATTEMPTS - loginAttempts) + " attempts remaining.");
