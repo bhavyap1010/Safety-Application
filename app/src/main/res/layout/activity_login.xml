@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
     android:gravity="center"
-    android:background="#F5F5F5">
+    android:background="#3F4A6B">
 
-    <!-- App name -->
+
+    <!-- Welcome Title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CSCB07 Final Project"
-        android:textSize="28sp"
+        android:text="Welcome! 👋"
+        android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="#2196F3"
-        android:layout_marginBottom="32dp"
-        android:gravity="center" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Please sign in to continue"
-        android:textSize="16sp"
-        android:textColor="#666666"
-        android:layout_marginBottom="32dp" />
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="80dp" />
 
     <!-- Email input -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="Email">
+        android:hint=""
+        app:hintEnabled="false">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="#3F4A6B"
+            android:hint="Email"
+            android:background="#FFFFFF" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -49,13 +46,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:hint="Password">
+        android:hint=""
+        app:hintEnabled="false">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="#3F4A6B"
+            android:hint="Password"
+            android:background="#FFFFFF" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -63,13 +64,14 @@
     <!-- Forgot Password button -->
     <Button
         android:id="@+id/buttonForgotPassword"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Forgot Password?"
         android:textSize="14sp"
-        android:textColor="#2196F3"
-        android:background="@android:color/transparent"
-        android:layout_marginBottom="16dp" />
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#3F4A6B"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center_horizontal" />
 
     <!-- Login button -->
     <Button
@@ -78,8 +80,9 @@
         android:layout_height="56dp"
         android:text="Login"
         android:textSize="16sp"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="#2196F3" />
+        android:textColor="#3F4A6B"
+        android:backgroundTint="#FFFFFF"
+        android:layout_marginBottom="12dp" />
 
     <!-- Register button -->
     <Button
@@ -88,9 +91,9 @@
         android:layout_height="56dp"
         android:text="Create Account"
         android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="#4CAF50" />
+        android:textColor="#3F4A6B"
+        android:backgroundTint="#FFFFFF"
+        android:layout_marginBottom="24dp" />
 
     <!-- Divider -->
     <View
@@ -104,7 +107,7 @@
         android:layout_height="wrap_content"
         android:text="OR"
         android:layout_gravity="center"
-        android:textColor="#666666"
+        android:textColor="#FFFFFF"
         android:layout_marginVertical="8dp" />
 
     <!-- Google Sign-In Button -->
@@ -114,9 +117,8 @@
         android:layout_height="56dp"
         android:text="Sign in with Google"
         android:textSize="16sp"
-        android:drawableLeft="@android:drawable/ic_dialog_email"
-        android:drawablePadding="8dp"
-        android:backgroundTint="#DB4437"
+        android:textColor="#3F4A6B"
+        android:backgroundTint="#FFFFFF"
         android:layout_marginTop="8dp" />
 
 </LinearLayout>
