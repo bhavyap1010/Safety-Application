@@ -9,6 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- autoLink="web" search for links in the text and underlines them -->
+        <!-- linksClickable="true" makes those same links clickable -->
+
         <TextView
             android:id="@+id/cityText"
             android:layout_width="match_parent"
@@ -34,7 +37,9 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:autoLink="web"
+            android:linksClickable="true"/>
 
         <TextView
             android:id="@+id/hotlineTextViewTitle"
@@ -51,7 +56,9 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:autoLink="web"
+            android:linksClickable="true"/>
 
         <TextView
             android:id="@+id/shelterTextViewTitle"
@@ -68,7 +75,9 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:autoLink="web"
+            android:linksClickable="true"/>
 
         <TextView
             android:id="@+id/legalAidTextViewTitle"
@@ -85,7 +94,9 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:autoLink="web"
+            android:linksClickable="true"/>
 
         <TextView
             android:id="@+id/policeTextViewTitle"
@@ -102,7 +113,9 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:autoLink="web"
+            android:linksClickable="true"/>
 
     </LinearLayout>
 </ScrollView>
