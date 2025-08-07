@@ -886,6 +886,32 @@ public class QuestionnaireFragment extends Fragment {
                 }
 
             }
+            arr = branches.getJSONArray("Follow-Up & Stabilization");
+
+
+
+
+                JSONObject jsonObject = arr.getJSONObject(0);
+                String questionContent = jsonObject.getString("Question");
+                String qid = jsonObject.getString("id");
+                String typeofq = jsonObject.getString("Type");
+
+
+                ArrayList<String> cs = new ArrayList<>();
+
+
+                    JSONArray choices = jsonObject.getJSONArray("Choices");
+                    for (int j = 0; j < choices.length(); j++) {
+                        cs.add(choices.getString(j));
+                    }
+
+                        allQuestions.add(new Question(questionContent, typeofq, cs, qid));
+
+
+
+
+
+
 
 
             question.setText(allQuestions.get(0).qs);
