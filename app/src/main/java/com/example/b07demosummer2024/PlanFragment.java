@@ -90,7 +90,7 @@ public class PlanFragment extends Fragment {
                     // all the actual answer id-value pair logic:
                     Object val = child.getValue();
                     if (val instanceof List<?>) { // this is useful for sr_01 as user can select multiple choice
-                        // Convert list to comma separated string for better display in the screen
+                        // Convert list to comma-separated string for better display in the screen
                         List<?> actualValue = (List<?>) val;
                         String joined = TextUtils.join(", ", actualValue);
                         answerMap.put(child.getKey(), joined);
