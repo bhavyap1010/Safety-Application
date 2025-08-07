@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 public class MainApplication extends Application {
-    private static final long BACKGROUND_TIMEOUT = 5000; // 5 seconds in milliseconds
+    private static final long BACKGROUND_TIMEOUT = 30000; // 5 seconds in milliseconds
     private static boolean requirePinAuth = false;
     private static long backgroundedTime = 0;
     private static Handler handler = new Handler(Looper.getMainLooper());
