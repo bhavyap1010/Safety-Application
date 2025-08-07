@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class PinSetupActivity extends AppCompatActivity {
+public class PinSetupActivity extends BaseActivity {
 
     private boolean isNewAccount;
     private EditText editTextPin, editTextConfirmPin;
@@ -44,8 +44,11 @@ public class PinSetupActivity extends AppCompatActivity {
 
         buttonSubmitPin.setOnClickListener(v -> setupPin(userID));
         buttonCancelPinSetup.setOnClickListener(v -> {
-            Intent intent = new Intent(PinSetupActivity.this, MainActivity.class);
-            intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);
+            // Sign out the user if they cancel PIN setup
+            mAuth.signOut();
+            Toast.makeText(this, "PIN setup is required for security. Please log in again.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(PinSetupActivity.this, LoginActivityView.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         });
@@ -79,14 +82,12 @@ public class PinSetupActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isNewAccount) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("NEW_ACCOUNT_CREATED", true);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        } else {
-            super.onBackPressed();
-        }
+        // Sign out the user if they try to go back without setting up PIN
+        mAuth.signOut();
+        Toast.makeText(this, "PIN setup is required for security. Please log in again.", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, LoginActivityView.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

@@ -55,10 +55,12 @@ public class LoginActivityPresenter {
                 Log.d(TAG, "signInWithEmail:success");
                 view.showSuccessMessage("Login successful");
 
-                if (pinManager.isPinEnabled(view.getContext(), model.getCurrentUser().getUid())) {
-                    view.startMainActivity(isNew);
-                } else {
+                // Always redirect to PIN setup if PIN is not enabled
+                if (!pinManager.isPinEnabled(view.getContext(), model.getCurrentUser().getUid())) {
+                    view.showToast("Please set up a PIN for additional security");
                     view.startPinSetupActivity();
+                } else {
+                    view.startMainActivity(isNew);
                 }
             }
 
@@ -119,7 +121,14 @@ public class LoginActivityPresenter {
             public void onSuccess(boolean isNew) {
                 Log.d(TAG, "signInWithCredential:success");
                 view.showSuccessMessage("Google sign in successful");
-                view.startMainActivity(isNew);
+
+                // Always redirect to PIN setup if PIN is not enabled
+                if (!pinManager.isPinEnabled(view.getContext(), model.getCurrentUser().getUid())) {
+                    view.showToast("Please set up a PIN for additional security");
+                    view.startPinSetupActivity();
+                } else {
+                    view.startMainActivity(isNew);
+                }
             }
 
             @Override

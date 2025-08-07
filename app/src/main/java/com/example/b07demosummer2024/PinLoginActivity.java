@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class PinLoginActivity extends AppCompatActivity {
+public class PinLoginActivity extends BaseActivity {
 
     private EditText editTextLoginPin;
     private Button buttonUnlock, buttonSwitchToEmailLogin;
@@ -47,6 +47,7 @@ public class PinLoginActivity extends AppCompatActivity {
         if (pinManager.verifyPin(this, enteredPin, userID)) {
             Toast.makeText(this, "PIN correct. Logging in...", Toast.LENGTH_SHORT).show();
             loginAttempts = 0;
+            MainApplication.setPinAuthRequired(false);
             Intent intent = new Intent(PinLoginActivity.this, MainActivity.class);
             startActivity(intent);
             finishAffinity();

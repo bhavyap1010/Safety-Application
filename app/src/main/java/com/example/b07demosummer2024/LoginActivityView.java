@@ -1,12 +1,19 @@
 package com.example.b07demosummer2024;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.view.View;
+import android.app.AlarmManager;
+import android.os.Build;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,7 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-public class LoginActivityView extends AppCompatActivity implements LoginActivityPresenter.LoginView {
+public class LoginActivityView extends BaseActivity implements LoginActivityPresenter.LoginView {
 
     private static final String TAG = "LoginActivity";
 
@@ -29,10 +36,15 @@ public class LoginActivityView extends AppCompatActivity implements LoginActivit
     private ActivityResultLauncher<Intent> googleSignInLauncher;
     private LoginActivityPresenter presenter;
 
+    private static final String PREFS_NAME = "AlarmPermissionPrefs";
+    private static final String KEY_DONT_ASK_AGAIN = "dontAskAgain";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        checkAlarmPermission();
 
         LoginActivityModel model = new LoginActivityModel();
         PinManager pinManager = new PinManager();
@@ -158,6 +170,56 @@ public class LoginActivityView extends AppCompatActivity implements LoginActivit
 
     @Override
     public Context getContext() {
-        return this; // Or getApplicationContext() if appropriate
+        return this;
+    }
+
+    private void checkAlarmPermission() {
+        Log.d(TAG, "Checking alarm permission");
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        boolean dontAskAgain = settings.getBoolean(KEY_DONT_ASK_AGAIN, false);
+        Log.d(TAG, "Don't ask again preference: " + dontAskAgain);
+
+        if (!dontAskAgain) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            // Only check canScheduleExactAlarms on Android S (API 31) and above
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                boolean canSchedule = alarmManager.canScheduleExactAlarms();
+                Log.d(TAG, "Can schedule exact alarms: " + canSchedule);
+                if (!canSchedule) {
+                    Log.d(TAG, "Showing alarm permission dialog");
+                    showAlarmPermissionDialog();
+                }
+            } else {
+                // On older Android versions, the permission is granted by default
+                Log.d(TAG, "Android version below S, permission granted by default");
+            }
+        }
+    }
+
+    private void showAlarmPermissionDialog() {
+        View checkBoxView = getLayoutInflater().inflate(R.layout.dialog_checkbox, null);
+        CheckBox checkBox = checkBoxView.findViewById(R.id.checkbox);
+        checkBox.setText("Don't ask again");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Exact Alarm Permission Required")
+                .setMessage("This app needs permission to schedule exact alarms for better functionality. Would you like to grant this permission?")
+                .setView(checkBoxView)
+                .setPositiveButton("Settings", (dialog, which) -> {
+                    if (checkBox.isChecked()) {
+                        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                        settings.edit().putBoolean(KEY_DONT_ASK_AGAIN, true).apply();
+                    }
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    if (checkBox.isChecked()) {
+                        SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                        settings.edit().putBoolean(KEY_DONT_ASK_AGAIN, true).apply();
+                    }
+                })
+                .show();
     }
 }
