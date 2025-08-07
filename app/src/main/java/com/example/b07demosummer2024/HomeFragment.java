@@ -17,8 +17,6 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_home_fragment, container, false);
 
         Button buttonRecyclerView = view.findViewById(R.id.buttonRecyclerView);
-        Button buttonScroller = view.findViewById(R.id.buttonScroller);
-        Button buttonSpinner = view.findViewById(R.id.buttonSpinner);
         Button buttonManageReminders = view.findViewById(R.id.buttonManageReminders);
         Button buttonViewSupportPage = view.findViewById(R.id.buttonViewSupportPage);
         Button buttonViewPlan = view.findViewById(R.id.buttonViewPlan);
@@ -34,25 +32,7 @@ public class HomeFragment extends Fragment {
                 ;}
         });
 
-        buttonScroller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new ScrollerFragment())
-                        .commit();
 
-                ;}
-        });
-
-        buttonSpinner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new SpinnerFragment())
-                        .commit();
-
-                ;}
-        });
 
         buttonManageReminders.setOnClickListener(new View.OnClickListener() {
             @Override
