@@ -33,13 +33,14 @@ import java.util.List;
 import android.content.SharedPreferences;
 import androidx.appcompat.app.AlertDialog;
 import android.widget.Button;
-import android.content.Intent;
 import android.net.Uri;
 
 public class MainActivity extends BaseActivity {
 
 //    private FirebaseDatabase db;
     private FirebaseAuth mAuth;
+    private static final String PREFS_NAME = "com.example.b07demosummer2024.PREFS";
+    private static final String KEY_DISCLAIMER_SEEN_PREFIX = "disclaimer_seen_";
 
 
     @Override
@@ -68,7 +69,7 @@ public class MainActivity extends BaseActivity {
             return;
         }
 
-        if (getIntent().getBooleanExtra("NEW_ACCOUNT_CREATED", false)) {
+        if (!hasSeenDisclaimer()) {
             showDisclaimer();
         }
 
@@ -86,7 +87,6 @@ public class MainActivity extends BaseActivity {
             });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -157,8 +157,23 @@ public class MainActivity extends BaseActivity {
         new AlertDialog.Builder(this)
                 .setView(noticeView)
                 .setCancelable(false)
-                .setPositiveButton(R.string.i_understand, (d, w) -> {
-                })
+                .setPositiveButton(R.string.i_understand, (d, w) -> setDisclaimerSeen())
                 .show();
+    }
+
+    private boolean hasSeenDisclaimer() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return false;
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return prefs.getBoolean(KEY_DISCLAIMER_SEEN_PREFIX + user.getUid(), false);
+    }
+
+    private void setDisclaimerSeen() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                        .edit()
+                        .putBoolean(KEY_DISCLAIMER_SEEN_PREFIX + user.getUid(), true)
+                        .apply();
     }
 }
