@@ -296,7 +296,6 @@ public class QuestionnaireFragment extends Fragment {
                                 }
 
                             } else {
-                                question.setText("Thanks!!!");
                                 ((MainActivity) requireActivity()).showPlanFragment();
 
                             }
@@ -792,72 +791,26 @@ public class QuestionnaireFragment extends Fragment {
         try{
             allQuestions.clear();
 
+
             //load
-            InputStream ins = requireContext().getAssets().open("questions.json");
+            InputStream ins = requireContext().getAssets().open("questions_and_tips.json");
             int s = ins.available();
             byte[] buffer = new byte[s];
             ins.read(buffer);
             ins.close();
 
-
-
-            //read
-
             String json = new String(buffer, StandardCharsets.UTF_8);
-            JSONObject root = new JSONObject(json);
 
-            JSONObject branches = root.getJSONObject("Branch");
-            JSONArray arr = branches.getJSONArray("Common Warm-Up Questions");
+            JSONArray arr = new JSONArray(json);
+
+
             int max = arr.length();
 
-
-
-            for(int i=1; i<max; i++) {
+            for (int i = 1; i <= 4; i++) {
                 JSONObject jsonObject = arr.getJSONObject(i);
-                String questionContent = jsonObject.getString("Question");
-                String typeofq = jsonObject.getString("Type");
+                String questionContent = jsonObject.getString("question");
+                String typeofq = jsonObject.getString("type");
                 String qid = jsonObject.getString("id");
-
-
-
-                ArrayList<String> cs= new ArrayList<>();
-
-                if (jsonObject.has("Choices")) {
-                    JSONArray choices = jsonObject.getJSONArray("Choices");
-                    for(int j=0; j< choices.length(); j++) {
-                        cs.add(choices.getString(j));
-                    }
-                    if(jsonObject.has("follow")) {
-                        String f = jsonObject.getString("follow");
-                        String fid = jsonObject.getString("fid");
-                        allQuestions.add(new Question(questionContent, typeofq, cs, qid, f, fid));
-                    }else {
-                        allQuestions.add(new Question(questionContent, typeofq, cs, qid));
-                    }
-                } else {
-
-                    if(jsonObject.has("follow")) {
-                        String f = jsonObject.getString("follow");
-                        String fid = jsonObject.getString("fid");
-                        allQuestions.add(new Question(questionContent, typeofq, qid, f, fid));
-                    }else {
-                        allQuestions.add(new Question(questionContent, typeofq,qid));
-                    }
-
-                }
-
-            }
-            arr = branches.getJSONArray(statchoice);
-
-            max = arr.length();
-
-
-            for (int i = 0; i < max; i++) {
-                JSONObject jsonObject = arr.getJSONObject(i);
-                String questionContent = jsonObject.getString("Question");
-                String qid = jsonObject.getString("id");
-                String typeofq = jsonObject.getString("Type");
-
 
                 ArrayList<String> cs = new ArrayList<>();
 
@@ -866,53 +819,139 @@ public class QuestionnaireFragment extends Fragment {
                     for (int j = 0; j < choices.length(); j++) {
                         cs.add(choices.getString(j));
                     }
-                    if(jsonObject.has("follow")) {
-                        String f = jsonObject.getString("follow");
+
+                    if (jsonObject.has("follow")) {
+                        String follow = jsonObject.getString("follow");
                         String fid = jsonObject.getString("fid");
-                        allQuestions.add(new Question(questionContent, typeofq, cs, qid, f, fid));
-                    }else {
+                        allQuestions.add(new Question(questionContent, typeofq, cs, qid, follow, fid));
+                    } else {
                         allQuestions.add(new Question(questionContent, typeofq, cs, qid));
                     }
                 } else {
-
-                    if(jsonObject.has("follow")) {
-                        String f = jsonObject.getString("follow");
+                    if (jsonObject.has("follow")) {
+                        String follow = jsonObject.getString("follow");
                         String fid = jsonObject.getString("fid");
-                        allQuestions.add(new Question(questionContent, typeofq, qid, f, fid));
-                    }else {
-                        allQuestions.add(new Question(questionContent, typeofq,qid));
+                        allQuestions.add(new Question(questionContent, typeofq, qid, follow, fid));
+                    } else {
+                        allQuestions.add(new Question(questionContent, typeofq, qid));
                     }
+                }
+            }
+            if(statchoice.equals("Still in a Relationship")) {
 
+                for (int i = 5; i <= 7; i++) {
+                    JSONObject jsonObject = arr.getJSONObject(i);
+                    String questionContent = jsonObject.getString("question");
+                    String typeofq = jsonObject.getString("type");
+                    String qid = jsonObject.getString("id");
+
+                    ArrayList<String> cs = new ArrayList<>();
+
+                    if (jsonObject.has("Choices")) {
+                        JSONArray choices = jsonObject.getJSONArray("Choices");
+                        for (int j = 0; j < choices.length(); j++) {
+                            cs.add(choices.getString(j));
+                        }
+
+                        if (jsonObject.has("follow")) {
+                            String follow = jsonObject.getString("follow");
+                            String fid = jsonObject.getString("fid");
+                            allQuestions.add(new Question(questionContent, typeofq, cs, qid, follow, fid));
+                        } else {
+                            allQuestions.add(new Question(questionContent, typeofq, cs, qid));
+                        }
+                    } else {
+                        if (jsonObject.has("follow")) {
+                            String follow = jsonObject.getString("follow");
+                            String fid = jsonObject.getString("fid");
+                            allQuestions.add(new Question(questionContent, typeofq, qid, follow, fid));
+                        } else {
+                            allQuestions.add(new Question(questionContent, typeofq, qid));
+                        }
+                    }
+                }
+
+
+            }else if(statchoice.equals("Planning to Leave")) {
+
+
+
+                for (int i = 8; i <= 11; i++) {
+                    JSONObject jsonObject = arr.getJSONObject(i);
+                    String questionContent = jsonObject.getString("question");
+                    String typeofq = jsonObject.getString("type");
+                    String qid = jsonObject.getString("id");
+
+                    ArrayList<String> cs = new ArrayList<>();
+
+                    if (jsonObject.has("Choices")) {
+                        JSONArray choices = jsonObject.getJSONArray("Choices");
+                        for (int j = 0; j < choices.length(); j++) {
+                            cs.add(choices.getString(j));
+                        }
+
+                        if (jsonObject.has("follow")) {
+                            String follow = jsonObject.getString("follow");
+                            String fid = jsonObject.getString("fid");
+                            allQuestions.add(new Question(questionContent, typeofq, cs, qid, follow, fid));
+                        } else {
+                            allQuestions.add(new Question(questionContent, typeofq, cs, qid));
+                        }
+                    } else {
+                        if (jsonObject.has("follow")) {
+                            String follow = jsonObject.getString("follow");
+                            String fid = jsonObject.getString("fid");
+                            allQuestions.add(new Question(questionContent, typeofq, qid, follow, fid));
+                        } else {
+                            allQuestions.add(new Question(questionContent, typeofq, qid));
+                        }
+                    }
+                }
+
+            }else {
+                for (int i = 12; i <= 14; i++) {
+                    JSONObject jsonObject = arr.getJSONObject(i);
+                    String questionContent = jsonObject.getString("question");
+                    String typeofq = jsonObject.getString("type");
+                    String qid = jsonObject.getString("id");
+
+                    ArrayList<String> cs = new ArrayList<>();
+
+                    if (jsonObject.has("Choices")) {
+                        JSONArray choices = jsonObject.getJSONArray("Choices");
+                        for (int j = 0; j < choices.length(); j++) {
+                            cs.add(choices.getString(j));
+                        }
+                        if (jsonObject.has("follow")) {
+                            String follow = jsonObject.getString("follow");
+                            String fid = jsonObject.getString("fid");
+                            allQuestions.add(new Question(questionContent, typeofq, cs, qid, follow, fid));
+                        } else {
+                            allQuestions.add(new Question(questionContent, typeofq, cs, qid));
+                        }
+                    } else {
+                        if (jsonObject.has("follow")) {
+                            String follow = jsonObject.getString("follow");
+                            String fid = jsonObject.getString("fid");
+                            allQuestions.add(new Question(questionContent, typeofq, qid, follow, fid));
+                        } else {
+                            allQuestions.add(new Question(questionContent, typeofq, qid));
+                        }
+                    }
                 }
 
             }
-            arr = branches.getJSONArray("Follow-Up & Stabilization");
+            JSONObject jsonObject = arr.getJSONObject(15);
+            String questionContent = jsonObject.getString("question");
+            String typeofq = jsonObject.getString("type");
+            String qid = jsonObject.getString("id");
 
-
-
-
-                JSONObject jsonObject = arr.getJSONObject(0);
-                String questionContent = jsonObject.getString("Question");
-                String qid = jsonObject.getString("id");
-                String typeofq = jsonObject.getString("Type");
-
-
-                ArrayList<String> cs = new ArrayList<>();
-
-
-                    JSONArray choices = jsonObject.getJSONArray("Choices");
-                    for (int j = 0; j < choices.length(); j++) {
-                        cs.add(choices.getString(j));
-                    }
-
-                        allQuestions.add(new Question(questionContent, typeofq, cs, qid));
-
-
-
-
-
-
-
+            ArrayList<String> cs = new ArrayList<>();
+            JSONArray choices = jsonObject.getJSONArray("Choices");
+            for (int j = 0; j < choices.length(); j++) {
+                cs.add(choices.getString(j));
+            }
+            allQuestions.add(new Question(questionContent, typeofq, cs, qid));
 
             question.setText(allQuestions.get(0).qs);
             showQ(0);
