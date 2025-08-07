@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ public class PlanFragment extends Fragment {
     private RecyclerView recyclerView;
     private PlanItemAdapter adapter;
     private List<PlanItem> items;
+    private TextView messageText; // for displaying if questionnaire is incomplete
 
     // we simply store the follow up question id in pairs so we can simply access it later
     // it is static because we want them to be available by class name and not only using object
@@ -52,6 +54,9 @@ public class PlanFragment extends Fragment {
         items = new ArrayList<>();
         adapter = new PlanItemAdapter(items);
         recyclerView.setAdapter(adapter);
+
+        messageText = view.findViewById(R.id.messageText);
+        messageText.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
         loadPlan();
@@ -75,6 +80,13 @@ public class PlanFragment extends Fragment {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // new check: if questionnaire not answered, show message & hide plan list
+                if (!snapshot.hasChild("wu_01")) {
+                    recyclerView.setVisibility(View.GONE);
+                    messageText.setVisibility(View.VISIBLE);
+                    return;
+                }
+
                 items.clear();
                 List<Question> templates = JSONUtility.loadQuestionTips(getContext());
 
@@ -118,7 +130,7 @@ public class PlanFragment extends Fragment {
                     String answer = entry.getValue();
 
                     // if there is a prefix, but not the one we want, so skip (i.e. continue)
-                    if (prefix != null && !questionID.startsWith(prefix) && !questionID.startsWith("wu_") && !questionID.startsWith("f_")) {
+                    if (prefix != null && !questionID.startsWith(prefix) && !questionID.startsWith("wu_") && !questionID.startsWith("f_") && !questionID.startsWith("fu_")) {
                         continue;
                     }
 

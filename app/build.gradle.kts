@@ -51,6 +51,7 @@ dependencies {
 
     // WorkManager
     implementation("androidx.work:work-runtime:2.8.1")
+    implementation(libs.annotation.jvm)
 
     testImplementation(libs.junit)
     testImplementation("org.mockito:mockito-core:5.8.0")

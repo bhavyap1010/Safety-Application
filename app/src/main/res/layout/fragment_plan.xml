@@ -15,6 +15,17 @@
         android:gravity="center"
         android:padding="16dp" />
 
+    <!-- message to display if questionnaire is incomplete -->
+    <TextView
+        android:id="@+id/messageText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please complete the questionnaire to view your plan"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/planItems"
         android:layout_width="match_parent"
