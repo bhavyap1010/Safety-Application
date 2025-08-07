@@ -5,11 +5,12 @@ import android.os.Handler;
 import android.os.Looper;
 
 public class MainApplication extends Application {
-    private static final long BACKGROUND_TIMEOUT = 5000; // 5 seconds in milliseconds
+    private static final long BACKGROUND_TIMEOUT = 30000;
     private static boolean requirePinAuth = false;
     private static long backgroundedTime = 0;
     private static Handler handler = new Handler(Looper.getMainLooper());
     private static Runnable backgroundTimer;
+    private static Class<?> lastActivity = null;
 
     public static void onBackground() {
         backgroundedTime = System.currentTimeMillis();
@@ -34,5 +35,17 @@ public class MainApplication extends Application {
 
     public static void setPinAuthRequired(boolean required) {
         requirePinAuth = required;
+    }
+
+    public static void setLastActivity(Class<?> activity) {
+        lastActivity = activity;
+    }
+
+    public static Class<?> getLastActivity() {
+        return lastActivity;
+    }
+
+    public static void clearLastActivity() {
+        lastActivity = null;
     }
 }

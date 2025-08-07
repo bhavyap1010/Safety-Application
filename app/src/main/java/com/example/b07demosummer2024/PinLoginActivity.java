@@ -24,6 +24,17 @@ public class PinLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin_login);
 
+        // Support for Up navigation if parent activity is specified
+        String parentActivity = getIntent().getStringExtra("parent_activity");
+        if (parentActivity != null) {
+            try {
+                Class<?> parentClass = Class.forName(parentActivity);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            } catch (ClassNotFoundException e) {
+                // Ignore if parent class not found
+            }
+        }
+
         pinManager = new PinManager();
         mAuth = FirebaseAuth.getInstance();
         String userID = mAuth.getCurrentUser().getUid();
@@ -48,9 +59,20 @@ public class PinLoginActivity extends BaseActivity {
             Toast.makeText(this, "PIN correct. Logging in...", Toast.LENGTH_SHORT).show();
             loginAttempts = 0;
             MainApplication.setPinAuthRequired(false);
-            Intent intent = new Intent(PinLoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finishAffinity();
+
+            // Get the parent activity that launched the PIN screen
+            Intent parentIntent = getParentActivityIntent();
+            if (parentIntent != null) {
+                // Navigate up to parent with proper flags
+                parentIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                navigateUpTo(parentIntent);
+            } else {
+                // Default to MainActivity if no parent
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
+            }
         } else {
             loginAttempts++;
             if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {

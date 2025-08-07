@@ -42,8 +42,11 @@ public class BaseActivity extends AppCompatActivity {
                 MainApplication.isRequirePinAuth()) {
 
                 Intent intent = new Intent(this, PinLoginActivity.class);
+                // Set this activity as parent of PinLoginActivity
+                intent.putExtra("parent_activity", getClass().getName());
+                // Preserve the task stack
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
-                finish();
             }
         }
     }
