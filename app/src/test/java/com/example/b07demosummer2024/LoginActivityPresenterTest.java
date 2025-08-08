@@ -1,6 +1,7 @@
 package com.example.b07demosummer2024;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.*;
 
 import android.content.Context;
 
@@ -46,7 +47,7 @@ public class LoginActivityPresenterTest {
         presenter.checkIfUserLoggedIn();
 
         verify(mockView).startPinLoginActivity();
-        verify(mockView, never()).startMainActivity();
+        verify(mockView, never()).startMainActivity(anyBoolean());
     }
 
     @Test
@@ -57,7 +58,7 @@ public class LoginActivityPresenterTest {
 
         presenter.checkIfUserLoggedIn();
 
-        verify(mockView).startMainActivity();
+        verify(mockView).startMainActivity(anyBoolean());
         verify(mockView, never()).startPinLoginActivity();
     }
 
@@ -68,7 +69,7 @@ public class LoginActivityPresenterTest {
         presenter.checkIfUserLoggedIn();
 
         verifyNoInteractions(mockPinManager);
-        verify(mockView, never()).startMainActivity();
+        verify(mockView, never()).startMainActivity(anyBoolean());
         verify(mockView, never()).startPinLoginActivity();
     }
 
@@ -76,17 +77,41 @@ public class LoginActivityPresenterTest {
     public void loginWithEmail_Success_ShowsSuccessAndStartsMain() {
         when(mockView.getEmailText()).thenReturn("test@example.com");
         when(mockView.getPasswordText()).thenReturn("password");
+        when(mockModel.getCurrentUser()).thenReturn(mockUser);
+        when(mockUser.getUid()).thenReturn("uid123");
+        when(mockPinManager.isPinEnabled(mockContext, "uid123")).thenReturn(false);
 
         doAnswer(invocation -> {
             LoginActivityModel.AuthCallback cb = invocation.getArgument(2);
-            cb.onSuccess();
+            cb.onSuccess(false);
             return null;
         }).when(mockModel).loginWithEmail(anyString(), anyString(), any());
 
         presenter.loginWithEmail();
 
         verify(mockView).showSuccessMessage("Login successful");
-        verify(mockView).startMainActivity();
+        verify(mockView).showToast("Please set up a PIN for additional security");
+        verify(mockView).startPinSetupActivity();
+    }
+
+    @Test
+    public void loginWithEmail_Success_NoPinEnabled_StartsMainActivity() {
+        when(mockView.getEmailText()).thenReturn("test@example.com");
+        when(mockView.getPasswordText()).thenReturn("password");
+        when(mockModel.getCurrentUser()).thenReturn(mockUser);
+        when(mockUser.getUid()).thenReturn("uid123");
+        when(mockPinManager.isPinEnabled(mockContext, "uid123")).thenReturn(true);
+
+        doAnswer(invocation -> {
+            LoginActivityModel.AuthCallback cb = invocation.getArgument(2);
+            cb.onSuccess(false);
+            return null;
+        }).when(mockModel).loginWithEmail(anyString(), anyString(), any());
+
+        presenter.loginWithEmail();
+
+        verify(mockView).showSuccessMessage("Login successful");
+        verify(mockView).startMainActivity(anyBoolean());
     }
 
     @Test
@@ -189,7 +214,7 @@ public class LoginActivityPresenterTest {
 
         doAnswer(invocation -> {
             LoginActivityModel.AuthCallback cb = invocation.getArgument(2);
-            cb.onSuccess();
+            cb.onSuccess(true);
             return null;
         }).when(mockModel).registerWithEmail(anyString(), anyString(), any());
 
@@ -249,16 +274,39 @@ public class LoginActivityPresenterTest {
 
     @Test
     public void firebaseAuthWithGoogle_Success_ShowsSuccessAndStartsMain() {
+        when(mockModel.getCurrentUser()).thenReturn(mockUser);
+        when(mockUser.getUid()).thenReturn("uid123");
+        when(mockPinManager.isPinEnabled(mockContext, "uid123")).thenReturn(false);
+        
         doAnswer(invocation -> {
             LoginActivityModel.AuthCallback cb = invocation.getArgument(1);
-            cb.onSuccess();
+            cb.onSuccess(false);
             return null;
         }).when(mockModel).firebaseAuthWithGoogle(anyString(), any());
 
         presenter.firebaseAuthWithGoogle("token");
 
         verify(mockView).showSuccessMessage("Google sign in successful");
-        verify(mockView).startMainActivity();
+        verify(mockView).showToast("Please set up a PIN for additional security");
+        verify(mockView).startPinSetupActivity();
+    }
+
+    @Test
+    public void firebaseAuthWithGoogle_Success_NoPinEnabled_StartsMainActivity() {
+        when(mockModel.getCurrentUser()).thenReturn(mockUser);
+        when(mockUser.getUid()).thenReturn("uid123");
+        when(mockPinManager.isPinEnabled(mockContext, "uid123")).thenReturn(true);
+        
+        doAnswer(invocation -> {
+            LoginActivityModel.AuthCallback cb = invocation.getArgument(1);
+            cb.onSuccess(false);
+            return null;
+        }).when(mockModel).firebaseAuthWithGoogle(anyString(), any());
+
+        presenter.firebaseAuthWithGoogle("token");
+
+        verify(mockView).showSuccessMessage("Google sign in successful");
+        verify(mockView).startMainActivity(anyBoolean());
     }
 
     @Test
@@ -280,7 +328,7 @@ public class LoginActivityPresenterTest {
 
         doAnswer(invocation -> {
             LoginActivityModel.AuthCallback cb = invocation.getArgument(1);
-            cb.onSuccess();
+            cb.onSuccess(false);
             return null;
         }).when(mockModel).resetPassword(anyString(), any());
 
