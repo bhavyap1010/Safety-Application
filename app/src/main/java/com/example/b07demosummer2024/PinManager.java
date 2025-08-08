@@ -1,0 +1,90 @@
+package com.example.b07demosummer2024;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Base64;
+
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class PinManager {
+
+    private static final String PREFERENCE_FILE_KEY = "com.example.b07demosummer2024.PIN_PREFS";
+    private static final String PIN_KEY = "user_pin";
+    private static final String PIN_ENABLED_KEY = "pin_enabled";
+
+
+    private SharedPreferences getEncryptedSharedPreferences(Context context) throws GeneralSecurityException, IOException {
+        String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+        return EncryptedSharedPreferences.create(
+                masterKeyAlias,
+                PREFERENCE_FILE_KEY,
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        );
+    }
+
+    public boolean storePin(Context context, String pin, String userID) {
+        String hashedPin = hashFunction(pin);
+
+        try {
+            SharedPreferences.Editor editor = getEncryptedSharedPreferences(context).edit();
+            editor.putString(PIN_KEY + userID, hashedPin);
+            editor.putBoolean(PIN_ENABLED_KEY + userID, true);
+            editor.apply();
+            return true;
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean verifyPin(Context context, String enteredPin, String userID) {
+        String hashedEnteredPin = hashFunction(enteredPin);
+
+        try {
+            String storedHashedPin = getEncryptedSharedPreferences(context).getString(PIN_KEY + userID, null);
+            return storedHashedPin != null && storedHashedPin.equals(hashedEnteredPin);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isPinEnabled(Context context, String userID) {
+        try {
+            return getEncryptedSharedPreferences(context).getBoolean(PIN_ENABLED_KEY + userID, false);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void clearPin(Context context, String userID) {
+        try {
+            SharedPreferences.Editor editor = getEncryptedSharedPreferences(context).edit();
+            editor.remove(PIN_KEY + userID);
+            editor.putBoolean(PIN_ENABLED_KEY + userID, false);
+            editor.apply();
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String hashFunction(String pin) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(pin.getBytes(StandardCharsets.UTF_8));
+            return Base64.encodeToString(hash, Base64.DEFAULT);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
