@@ -45,7 +45,8 @@ Note by following these steps you are not using the final published app, this is
       d. Your Apps<br>
       e. Add Fingerprint (paste here)<br>
 6. Scroll to the top of Your Apps and click the download icon for google-services.json and place it in app/google-services.json.
-7. Run the app.
+7. Enable notifications in the phone settings for the app.
+8. Run the app.
 
 
 **Members Contributions:**
