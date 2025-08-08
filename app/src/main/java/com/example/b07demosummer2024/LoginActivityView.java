@@ -120,7 +120,6 @@ public class LoginActivityView extends BaseActivity implements LoginActivityPres
         });
     }
 
-    // Implementation of LoginView interface methods
     @Override
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -131,21 +130,21 @@ public class LoginActivityView extends BaseActivity implements LoginActivityPres
         Intent intent = new Intent(LoginActivityView.this, MainActivity.class);
         intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);
         startActivity(intent);
-        finish(); // Close login activity so user can't go back to it
+        finish();
     }
 
     @Override
     public void startPinLoginActivity() {
         Intent intent = new Intent(LoginActivityView.this, PinLoginActivity.class);
         startActivity(intent);
-        finish(); // Close login activity so user can't go back to it
+        finish();
     }
 
     @Override
     public void startPinSetupActivity() {
         Intent intent = new Intent(LoginActivityView.this, PinSetupActivity.class); // Or your actual PIN setup activity name
         startActivity(intent);
-        finish(); // Close login activity
+        finish();
     }
 
     @Override
@@ -182,7 +181,6 @@ public class LoginActivityView extends BaseActivity implements LoginActivityPres
         if (!dontAskAgain) {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-            // Only check canScheduleExactAlarms on Android S (API 31) and above
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 boolean canSchedule = alarmManager.canScheduleExactAlarms();
                 Log.d(TAG, "Can schedule exact alarms: " + canSchedule);
@@ -191,7 +189,6 @@ public class LoginActivityView extends BaseActivity implements LoginActivityPres
                     showAlarmPermissionDialog();
                 }
             } else {
-                // On older Android versions, the permission is granted by default
                 Log.d(TAG, "Android version below S, permission granted by default");
             }
         }

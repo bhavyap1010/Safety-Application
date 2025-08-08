@@ -48,11 +48,9 @@ public class ReminderWorker extends Worker {
     }
 
     private void showNotification(String title, String message, int notificationId) {
-        // Create an Intent to launch MainActivity
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        // Create the PendingIntent
         PendingIntent pendingIntent = PendingIntent.getActivity(
             getApplicationContext(),
             notificationId,
@@ -60,7 +58,6 @@ public class ReminderWorker extends Worker {
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        // Build the notification with the PendingIntent
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)

@@ -111,8 +111,6 @@ public class SupportFragment extends Fragment {
             return new String(buffer, StandardCharsets.UTF_8);
         }
         catch (Exception e){
-            // e.printStackTrace();
-            // instead of e.printStackTrace(), print out a more detailed log
             Log.e("SupportFragment", "Error reading JSON file", e);
             return null;
         }

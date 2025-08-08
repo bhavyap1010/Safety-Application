@@ -101,7 +101,6 @@ public class LoginActivityPresenter {
             public void onFailure(String errorMessage) {
                 Log.w(TAG, "createUserWithEmail:failure");
                 Log.e(TAG, "Full error: " + errorMessage);
-                // More user-friendly error messages based on common Firebase errors:
                 if (errorMessage.contains("ERROR_EMAIL_ALREADY_IN_USE")) {
                     view.showErrorMessage("This email address is already in use. Please try logging in or use a different email.");
                 } else if (errorMessage.contains("ERROR_WEAK_PASSWORD")) {

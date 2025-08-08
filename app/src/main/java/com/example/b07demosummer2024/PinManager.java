@@ -1,4 +1,3 @@
-// PinManager.java
 package com.example.b07demosummer2024;
 
 import android.content.Context;
@@ -16,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 public class PinManager {
 
     private static final String PREFERENCE_FILE_KEY = "com.example.b07demosummer2024.PIN_PREFS";
-    private static final String PIN_KEY = "user_pin"; // Store HASHED PIN here
+    private static final String PIN_KEY = "user_pin";
     private static final String PIN_ENABLED_KEY = "pin_enabled";
 
 

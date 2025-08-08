@@ -57,7 +57,6 @@ public class EditItemFragment extends Fragment {
         initializeViews(view);
         setupFirebase();
 
-        // Check if we're editing an existing item
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey("item_to_edit")) {
             currentItem = (Item) bundle.getSerializable("item_to_edit");
@@ -217,17 +216,14 @@ public class EditItemFragment extends Fragment {
         String itemId;
 
         if (isEditMode && currentItem != null) {
-            // EDITING EXISTING ITEM - Use existing item and ID
             item = currentItem;
             category = item.getCategory();
-            itemId = item.getId(); // Use existing ID, don't generate new one
+            itemId = item.getId();
 
-            // Update the item with new values
             item.setTitle(title);
             item.setDescription(description);
             item.setDate(date);
         } else {
-            // CREATING NEW ITEM - Generate new ID
             Bundle bundle = getArguments();
             if (bundle != null && bundle.containsKey("category")) {
                 category = bundle.getString("category");
@@ -371,7 +367,7 @@ public class EditItemFragment extends Fragment {
 
         if (requestCode == 2 && resultCode == RESULT_OK && data != null){
             imageUri = data.getData();
-            imageViewAddImageDisplay.setImageURI(imageUri); //this is what change the image in the app
+            imageViewAddImageDisplay.setImageURI(imageUri); //this is what changes the image in the app
             imageViewAddImageDisplay.setVisibility(View.VISIBLE);
         }
 

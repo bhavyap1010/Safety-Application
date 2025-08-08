@@ -98,9 +98,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
                         int itemId = menuItem.getItemId();
                         int adapterPosition = holder.getAdapterPosition(); // Fixed: Use holder.getAdapterPosition()
-                        //Bring to edit pag
-                        // You have access to 'item' (the data for this row)
-                        // and 'position' (the adapter position of this row)
+
                         if (itemId == R.id.menu_edit) {
                             Toast.makeText(v.getContext(), "Edit: " + item.getTitle(), Toast.LENGTH_SHORT).show();
                             if (editClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {

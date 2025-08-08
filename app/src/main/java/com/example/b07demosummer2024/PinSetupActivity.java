@@ -1,4 +1,4 @@
-package com.example.b07demosummer2024; // Use your actual package name
+package com.example.b07demosummer2024;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -68,7 +68,7 @@ public class PinSetupActivity extends BaseActivity {
             return;
         }
 
-        if (pinManager.storePin(this, pin, userID)) { // Use PinManager
+        if (pinManager.storePin(this, pin, userID)) {
             Toast.makeText(this, "PIN setup successful!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("NEW_ACCOUNT_CREATED", isNewAccount);

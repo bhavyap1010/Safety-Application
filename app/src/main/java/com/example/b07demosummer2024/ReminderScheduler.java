@@ -21,29 +21,23 @@ public class ReminderScheduler {
 
     public void scheduleReminder(Reminder reminder) {
         try {
-            // Parse the time
             Date reminderTime = timeFormat.parse(reminder.getTime());
             if (reminderTime == null) return;
 
-            // Calculate the initial delay
             Calendar now = Calendar.getInstance();
             Calendar scheduledTime = Calendar.getInstance();
             scheduledTime.setTime(reminderTime);
 
-            // Set the scheduled time for today
             scheduledTime.set(Calendar.YEAR, now.get(Calendar.YEAR));
             scheduledTime.set(Calendar.MONTH, now.get(Calendar.MONTH));
             scheduledTime.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
 
-            // If the time has already passed today, schedule for tomorrow
             if (now.after(scheduledTime)) {
                 scheduledTime.add(Calendar.DAY_OF_MONTH, 1);
             }
 
-            // Calculate the delay in minutes
             long delayInMinutes = (scheduledTime.getTimeInMillis() - now.getTimeInMillis()) / (60 * 1000);
 
-            // Create the work request with minimal data
             Data inputData = new Data.Builder()
                 .putInt("notificationId", reminder.getId().hashCode())
                 .build();
@@ -53,10 +47,8 @@ public class ReminderScheduler {
                 .setInputData(inputData)
                 .build();
 
-            // Enqueue the work
             WorkManager.getInstance(context).enqueue(workRequest);
 
-            // For recurring reminders, schedule the next occurrence based on frequency
             if (!reminder.getFrequency().equals("once")) {
                 scheduleNextRecurrence(reminder, scheduledTime);
             }

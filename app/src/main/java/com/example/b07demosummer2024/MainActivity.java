@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //start of new
+
         Button exitBtn = findViewById(R.id.btn_exit);
         exitBtn.setOnClickListener(v -> {
             Intent browser = new Intent(Intent.ACTION_VIEW,
@@ -57,7 +57,6 @@ public class MainActivity extends BaseActivity {
             finishAndRemoveTask();
         });
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         // Check if user is authenticated
@@ -106,7 +105,7 @@ public class MainActivity extends BaseActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_home) {
-        // findViewById(R.id.main).setVisibility(View.GONE);
+
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new HomeFragment())

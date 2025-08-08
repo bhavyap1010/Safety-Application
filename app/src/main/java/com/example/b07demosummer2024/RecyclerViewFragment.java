@@ -135,7 +135,6 @@ public class RecyclerViewFragment extends Fragment {
         };
         itemsRef.addValueEventListener(currentListener);
     }
-    // Simpler approach - replace your navigateToEditFragment method with this:
     private void navigateToEditFragment(Item item) {
         if (item == null) {
             Log.e("Navigation", "Cannot navigate: item is null");
@@ -156,7 +155,7 @@ public class RecyclerViewFragment extends Fragment {
         editFragment.setArguments(bundle);
 
         getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, editFragment) // Make sure this ID matches your actual container
+                .replace(R.id.fragment_container, editFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -177,7 +176,6 @@ public class RecyclerViewFragment extends Fragment {
 
         itemRef.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                // Use adapter method
                 itemAdapter.removeItem(item.getId());
                 Toast.makeText(getContext(), "Item deleted successfully", Toast.LENGTH_SHORT).show();
             } else {

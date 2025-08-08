@@ -1,4 +1,4 @@
-package com.example.b07demosummer2024; // Use your actual package name
+package com.example.b07demosummer2024;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,14 +24,12 @@ public class PinLoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin_login);
 
-        // Support for Up navigation if parent activity is specified
         String parentActivity = getIntent().getStringExtra("parent_activity");
         if (parentActivity != null) {
             try {
                 Class<?> parentClass = Class.forName(parentActivity);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             } catch (ClassNotFoundException e) {
-                // Ignore if parent class not found
             }
         }
 
@@ -63,7 +61,6 @@ public class PinLoginActivity extends BaseActivity {
             // Get the parent activity that launched the PIN screen
             Intent parentIntent = getParentActivityIntent();
             if (parentIntent != null) {
-                // Navigate up to parent with proper flags
                 parentIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 navigateUpTo(parentIntent);
             } else {
