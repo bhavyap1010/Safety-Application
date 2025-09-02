@@ -1,3 +1,7 @@
+## Demo
+
+https://github.com/user-attachments/assets/21371a84-5216-419b-bdf8-0198ae8d8142
+
 **General App Description and Layout:**
 
 This app empowers users by helping them assess, plan, and manage their safety before, during, and after an abusive relationship. It reflects the reality that each situation is unique and plans must be tailored, flexible, and revisited regularly. This app never collects or stores identifiable information such as the user’s name, address, phone number, etc, unless the user permits (i.e. uploading documents). The user gets to control what is saved or deleted. It uses gentle, non-blaming language so users do not feel pressured. It is important to note that this app is not a substitute for emergency services but rather a tool to help users navigate their situation. 
